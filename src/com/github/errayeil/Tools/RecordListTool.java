@@ -1,6 +1,7 @@
 package com.github.errayeil.Tools;
 
-import com.github.errayeil.utils.Utils;
+import com.github.errayeil.utils.CompUtils;
+import com.github.errayeil.utils.ToolsUtils;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -16,7 +17,7 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-public class RecordRetrieveTool {
+public class RecordListTool {
 
     /**
      * The directory the records are read from.
@@ -41,7 +42,7 @@ public class RecordRetrieveTool {
     /**
      * Constructs this ModdingSuite app.
      */
-    public RecordRetrieveTool() {
+    public RecordListTool () {
 
     }
 
@@ -74,7 +75,7 @@ public class RecordRetrieveTool {
      * Allows the user to choose what directory(ies) that contains records to be exported.
      */
     private boolean getDirectoriesToRead() {
-        JFileChooser chooser = Utils.getFileChooser("Choose location of the records", JFileChooser.DIRECTORIES_ONLY, true);
+        JFileChooser chooser = CompUtils.getFileChooser("Choose location of the records", JFileChooser.DIRECTORIES_ONLY, true);
 
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             folderToRead = chooser.getSelectedFiles();
@@ -87,7 +88,7 @@ public class RecordRetrieveTool {
      * Allows the user to choose the output files location.
      */
     private boolean getOutputLocation() {
-        JFileChooser chooser = Utils.getFileChooser("Choose output file location", JFileChooser.DIRECTORIES_ONLY, false);
+        JFileChooser chooser = CompUtils.getFileChooser("Choose output file location", JFileChooser.DIRECTORIES_ONLY, false);
 
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             outputLocation = chooser.getSelectedFile();
@@ -150,7 +151,7 @@ public class RecordRetrieveTool {
                 if (files != null) {
                     for (File f : files) {
                         String path = f.getAbsolutePath();
-                        toWrite.add(Utils.trimRecord(path)); //Substrings the string to start with records/ and replaces all \ with / (if windows)
+                        toWrite.add( ToolsUtils.trimRecord(path)); //Substrings the string to start with records/ and replaces all \ with / (if windows)
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Files could not be retrieved.", "Null file list", JOptionPane.ERROR_MESSAGE);

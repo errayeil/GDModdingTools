@@ -17,7 +17,7 @@ public class CloseAMAction implements ActionListener {
 
 	/**
 	 *
-	 * @param window
+	 * @param menubar
 	 */
 	public CloseAMAction( JMenuBar menubar ) {
 		this.menubar = menubar;
@@ -25,6 +25,6 @@ public class CloseAMAction implements ActionListener {
 
 	@Override
 	public void actionPerformed ( ActionEvent e ) {
-		SwingUtilities.windowForComponent ( menubar ).dispose ();;
+		SwingUtilities.windowForComponent ( menubar ).dispose ();
 	}
 }

@@ -1,4 +1,4 @@
 package com.github.errayeil.Tools;
 
-public class RecordEditorTool {
+public class LuaEditorTool {
 }

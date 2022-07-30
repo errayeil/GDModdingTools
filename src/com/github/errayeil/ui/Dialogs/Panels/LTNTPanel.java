@@ -1,10 +1,11 @@
-package com.github.errayeil.ui.Dialogs;
+package com.github.errayeil.ui.Dialogs.Panels;
 
 import com.alexandriasoftware.swing.JInputValidator;
 import com.alexandriasoftware.swing.JInputValidatorPreferences;
 import com.alexandriasoftware.swing.Validation;
 import com.github.errayeil.ui.Dialogs.EntryData.NameToolEntryData;
-import com.github.errayeil.utils.Utils;
+import com.github.errayeil.utils.CompUtils;
+import com.github.errayeil.utils.ToolsUtils;
 import io.codeworth.panelmatic.PanelMatic;
 
 import javax.swing.*;
@@ -13,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
-import static com.github.errayeil.utils.Utils.createFiller;
+import static com.github.errayeil.utils.CompUtils.fill;
 import static io.codeworth.panelmatic.componentbehavior.Modifiers.*;
 import static io.codeworth.panelmatic.util.Groupings.lineGroup;
 
@@ -22,7 +23,7 @@ import static io.codeworth.panelmatic.util.Groupings.lineGroup;
  * @version 1.0
  * @since 1.0
  */
-class LTNameToolInputPanel extends JComponent {
+public class LTNTPanel extends JComponent {
 
 	/**
 	 *
@@ -57,7 +58,7 @@ class LTNameToolInputPanel extends JComponent {
 	/**
 	 *
 	 */
-	public LTNameToolInputPanel ( ) {
+	public LTNTPanel ( ) {
 		okButton = new JButton ( "Okay" );
 		lootTableFilesField = new JTextField ( 50 );
 		recordsDirectoryField = new JTextField ( 50 );
@@ -79,14 +80,14 @@ class LTNameToolInputPanel extends JComponent {
 		rHeader.setFont ( font );
 
 		ActionListener al = e -> {
-			SwingUtilities.windowForComponent ( LTNameToolInputPanel.this ).dispose ( );
+			SwingUtilities.windowForComponent ( LTNTPanel.this ).dispose ( );
 		};
 
 		okButton.addActionListener ( al );
 		cancelButton.addActionListener ( al );
 
 		lootTableFCButton.addActionListener ( ( a ) -> {
-			JFileChooser chooser = Utils.getFileChooser ( "Choose Loot Table files" , JFileChooser.FILES_ONLY , true );
+			JFileChooser chooser = CompUtils.getFileChooser ( "Choose Loot Table files" , JFileChooser.FILES_ONLY , true );
 
 			if ( chooser.showOpenDialog ( null ) == JFileChooser.APPROVE_OPTION ) {
 				File[] files = chooser.getSelectedFiles ( );
@@ -95,7 +96,7 @@ class LTNameToolInputPanel extends JComponent {
 		} );
 
 		recordDirectoryFCButton.addActionListener ( ( a ) -> {
-			JFileChooser chooser = Utils.getFileChooser ( "Choose directory records reside in" , JFileChooser.DIRECTORIES_ONLY , false );
+			JFileChooser chooser = CompUtils.getFileChooser ( "Choose directory records reside in" , JFileChooser.DIRECTORIES_ONLY , false );
 
 			if ( chooser.showOpenDialog ( null ) == JFileChooser.APPROVE_OPTION ) {
 				String path = chooser.getSelectedFile ( ).getAbsolutePath ( );
@@ -119,7 +120,7 @@ class LTNameToolInputPanel extends JComponent {
 
 				boolean valid = true;
 				for ( String s : data.lootTableFiles ) {
-					if ( !Utils.isValidLTFile ( new File ( s ) ) ) {
+					if ( !ToolsUtils.isValidLTFile ( new File ( s ) ) ) {
 						message = determine + "is not a valid loot table file.";
 						type = Validation.Type.WARNING;
 						valid = false;
@@ -136,7 +137,7 @@ class LTNameToolInputPanel extends JComponent {
 		recordsDirectoryField.setInputVerifier ( new JInputValidator ( recordsDirectoryField ) {
 			@Override
 			protected Validation getValidation ( JComponent component , JInputValidatorPreferences preferences ) {
-				int invalid = Utils.countDBRFiles ( new File ( data.recordPath ) );
+				int invalid = ToolsUtils.countDBRFiles ( new File ( data.recordPath ) );
 				String message = "";
 				Validation.Type type = Validation.Type.NONE;
 
@@ -158,14 +159,14 @@ class LTNameToolInputPanel extends JComponent {
 		} );
 
 		PanelMatic.begin ( this )
-				.add ( createFiller ( 1 , 0 ) , ltHeader , L_START )
-				.add ( lineGroup ( createFiller ( 5 , 5 ) , lootTableFilesField , createFiller ( 5 , 5 ) , lootTableFCButton , createFiller ( 5 , 5 ) ) ,
+				.add ( fill ( 1 , 0 ) , ltHeader , L_START )
+				.add ( lineGroup ( fill ( 5 , 5 ) , lootTableFilesField , fill ( 5 , 5 ) , lootTableFCButton , fill ( 5 , 5 ) ) ,
 						L_START , L_END , GROW )
-				.add ( createFiller ( 1 , 0 ) , rHeader , L_START )
-				.add ( lineGroup ( createFiller ( 5 , 5 ) , recordsDirectoryField , createFiller ( 5 , 5 ) , recordDirectoryFCButton , createFiller ( 5 , 5 ) ) ,
+				.add ( fill ( 1 , 0 ) , rHeader , L_START )
+				.add ( lineGroup ( fill ( 5 , 5 ) , recordsDirectoryField , fill ( 5 , 5 ) , recordDirectoryFCButton , fill ( 5 , 5 ) ) ,
 						L_START , L_END )
 				.addFlexibleSpace ( )
-				.add ( lineGroup ( okButton , createFiller ( 5 , 5 ) , cancelButton ) , L_CENTER )
+				.add ( lineGroup ( okButton , fill ( 5 , 5 ) , cancelButton ) , L_CENTER )
 				.addFlexibleSpace ( )
 				.get ( );
 	}

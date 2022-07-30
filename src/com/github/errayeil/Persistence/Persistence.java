@@ -1,6 +1,7 @@
 package com.github.errayeil.Persistence;
 
-import com.github.errayeil.utils.Utils;
+import com.github.errayeil.ui.Custom.AMFileChooser;
+import com.github.errayeil.utils.SystemUtils;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -32,25 +33,43 @@ import java.util.prefs.Preferences;
 public final class Persistence {
 
 	/**
-	 *
+	 * The instance of the Persistence class.
 	 */
-	private static Persistence persist;
+	private static Persistence instance;
 
 	/**
-	 *
+	 * The Preferences instance we're using to save data that needs to be persistent.
 	 */
 	private Preferences store;
 
 	/**
-	 * Key strings used in addition to component names.
+	 *
+	 */
+	private boolean allowChanges = true;
+
+	/**
+	 * Below you will find a ton of public final String keys used for
+	 * registering preferences to the preferences store. The point is to make it easier
+	 * to write to the preferences store and minimizing mistakes. I think the variable names
+	 * are descriptive enough but I'm happy to refactor them as needed.
+	 */
+
+	/*
+	 * Keys for file choosers.
 	 */
 	public final String currentDirKey = "-currentDir";
 
+	/*
+	 * Keys for registering dialog size and width.
+	 */
 	public final String widthKey = "-width";
 	public final String heightKey = "-height";
 	public final String xKey = "-x";
 	public final String yKey = "-y";
 
+	/*
+	 * Keys for registering grim dawn modding directories.
+	 */
 	public final String pathKey = "-path";
 	public final String gdDirKey = "gdDir";
 	public final String gdBuildDirKey = "gdBuildDir";
@@ -62,6 +81,9 @@ public final class Persistence {
 	public final String backupDirKey = "backupDir";
 	public final String gdExeDirKey = "grim dawn.exe-path";
 
+	/*
+	 * Keys for GD modding tools.
+	 */
 	public final String aifEditorKey = "aifeditor.exe-path";
 	public final String animCompKey = "animationcompiler.exe-path";
 	public final String archiveToolKey = "archivetool.exe-path";
@@ -81,28 +103,74 @@ public final class Persistence {
 	public final String texViewerKey = "texviewer.exe-path";
 	public final String meshViewerKey = "viewer.exe-path";
 
+	/*
+	 * Keys for registering preferred editors for lua, txt, and image type files.
+	 */
 	public final String prefEditorKey = "prefEditorFor";
+	public final String luaKey = "lua";
+	public final String txtKey = "txt";
+	public final String imgKey = "img";
+	public final String builtInKey = "USE BUILT-IN";
 
+	/*
+	 * Key for registering setup completion.
+	 */
+	public final String setupCompleteKey = "setup-completed";
+
+	/*
+	 * Keys for registering GDModdingSuite directories.
+	 */
+	public final String suiteInstallDirKey = "suiteInstallDir";
+	public final String suiteLogFileDirKey = "suiteLogFileDir";
+	public final String suiteUpdateDirKey = "suiteUpdateDir";
+	public final String suiteLogFilePathKey = "suiteLogFilePath";
+	public final String suiteVersionKey = "suiteVersion";
 
 	/**
-	 *
+	 * Private constructor to prevent out-of-scope initialization.
+	 * This gets the Preferences' node for this class.
 	 */
 	private Persistence ( ) {
+
 		store = Preferences.userNodeForPackage ( Persistence.class );
 	}
 
 	/**
-	 * @return
+	 * Applies changes made to the preferences store.
 	 */
-	public static Persistence getInstance ( ) {
-		if ( persist == null )
-			persist = new Persistence ( );
-
-		return persist;
+	private void push () {
+		if (allowChanges) {
+			try {
+				store.flush ();
+			} catch ( BackingStoreException e ) {
+				//TODO logging
+				throw new RuntimeException ( e );
+			}
+		} else {
+			//TODO logging
+		}
 	}
 
 	/**
-	 *
+	 * Returns the instance of Persistence.
+	 * @return
+	 */
+	public static Persistence getInstance ( ) {
+		if ( instance == null )
+			instance = new Persistence ( );
+
+		return instance;
+	}
+
+	/**
+	 * Sets if changes made to the store should actually be written.
+	 */
+	public void setAllowChanges(boolean allowChanges) {
+		this.allowChanges = allowChanges;
+	}
+
+	/**
+	 * Returns the actual Preferences node.
 	 * @return
 	 */
 	public Preferences getStore() {
@@ -111,9 +179,10 @@ public final class Persistence {
 
 	/**
 	 * Only used for testing purposes.
+	 * Calling this clears all registered keys and will have to be set again by the user.
+	 * Probably would be a good idea to leave this for user functionality.
 	 */
 	public void clear() {
-
 		try {
 			store.removeNode ();
 			store.flush ();
@@ -125,14 +194,28 @@ public final class Persistence {
 	}
 
 	/**
-	 * Applies changes made to the preferences store.
+	 * Registers setup has been completed. Once this is registered, the app will load straight into
+	 * AssetManager, skipping the setup dialog.
 	 */
-	private void push () {
-		try {
-			store.flush ();
-		} catch ( BackingStoreException e ) {
-			throw new RuntimeException ( e );
-		}
+	public void registerSetupCompletion() {
+		store.putBoolean ( setupCompleteKey, true );
+		push();
+	}
+
+	/**
+	 * Returns if changes are being pushed to the store.
+	 * @return True or false
+	 */
+	public boolean isAllowingChanges() {
+		return allowChanges;
+	}
+
+	/**
+	 * Returns true or false if the setup process has been completed.
+	 * @return Boolean, ?what am I supposed to put here?
+	 */
+	public boolean isSetupCompleted() {
+		return store.getBoolean ( setupCompleteKey, false );
 	}
 
 	/**
@@ -141,7 +224,7 @@ public final class Persistence {
 	 * returning false.
 	 *
 	 * @param key The key to see if a value has been paired with.
-	 * @return
+	 * @return true or false if the key is registered.
 	 */
 	public boolean hasBeenRegistered ( String key ) {
 		if (key.contains ( widthKey ) || key.contains ( heightKey ) || key.contains ( xKey ) || key.contains ( yKey )) {
@@ -159,6 +242,20 @@ public final class Persistence {
 	 */
 	public String getDirectory(String key) {
 		return store.get ( key, "null" );
+	}
+
+	/**
+	 *
+	 * @param chooser
+	 * @param chooserKey
+	 */
+	public void loadAndRegister( AMFileChooser chooser, String chooserKey) {
+		if (hasBeenRegistered ( chooserKey )) {
+			loadConfig ( chooser, chooserKey );
+		} else {
+			chooser.setNullLocationRelative ( true );
+		}
+		registerFileChooser ( chooser, chooserKey );
 	}
 
 	/**
@@ -182,27 +279,30 @@ public final class Persistence {
 	 * @// TODO: File filter config
 	 *
 	 * @param chooser
-	 * @param chooserName
+	 * @param chooserKey
 	 */
-	public void loadConfig ( JFileChooser chooser , String chooserName ) {
-		chooser.setCurrentDirectory ( new File ( store.get ( chooserName + currentDirKey , System.getProperty ( "user.home" ) ) ) );
+	public void loadConfig ( AMFileChooser chooser , String chooserKey ) {
+		chooser.setCurrentDirectory ( new File ( store.get ( chooserKey + currentDirKey , System.getProperty ( "user.home" ) ) ) );
+
+		setonShownValues ( chooser, chooserKey );
 	}
 
 	/**
-	 * @param directoryName
-	 * @param directoryPath
+	 * Registers the specified directory.
+	 *
+	 * @param directoryKey The key for the registry.
+	 * @param directoryPath The path of the directory.
 	 */
-	public void registerDirectory ( String directoryName , String directoryPath ) {
-		store.put ( directoryName , directoryPath );
-
+	public void registerDirectory ( String directoryKey , String directoryPath ) {
+		store.put ( directoryKey , directoryPath );
 		push ();
 	}
 
 	/**
 	 * @param chooser
-	 * @param chooserName
+	 * @param chooserKey
 	 */
-	public void registerFileChooser ( JFileChooser chooser , String chooserName ) {
+	public void registerFileChooser ( AMFileChooser chooser , String chooserKey ) {
 		chooser.addPropertyChangeListener ( evt -> {
 			String prop = evt.getPropertyName ( );
 
@@ -210,7 +310,7 @@ public final class Persistence {
 				File dir = chooser.getCurrentDirectory ( );
 
 				if ( dir != null ) {
-					store.put ( chooserName + currentDirKey , dir.getAbsolutePath ( ) );
+					store.put ( chooserKey + currentDirKey , dir.getAbsolutePath ( ) );
 
 					try {
 						store.flush ( );
@@ -220,30 +320,49 @@ public final class Persistence {
 				}
 			}
 		} );
+
+		ComponentAdapter adapter = new ComponentAdapter ( ) {
+			@Override
+			public void componentResized ( ComponentEvent e ) {
+				setonResizeValues ( chooser, chooserKey );
+			}
+
+			@Override
+			public void componentMoved ( ComponentEvent e ) {
+				setonMovedValues ( chooser, chooserKey );
+			}
+
+			@Override
+			public void componentShown ( ComponentEvent e ) {
+				setonShownValues ( chooser, chooserKey );
+			}
+		};
+
+		chooser.setComponentAdapter ( adapter );
 	}
 
 	/**
 	 * @param dialog     The component we are registering to listen for component changes.
-	 * @param dialogName The name is used as a key to retrieve previous values or set new ones.
+	 * @param dialogKey The name is used as a key to retrieve previous values or set new ones.
 	 */
-	public void registerDialog ( JDialog dialog , String dialogName ) {
-		store.put ( dialogName, "registered" );
+	public void registerDialog ( JDialog dialog , String dialogKey ) {
+		store.put ( dialogKey, "registered" );
 		push ();
 
 		dialog.addComponentListener ( new ComponentAdapter ( ) {
 			@Override
 			public void componentResized ( ComponentEvent e ) {
-				setonResizeValues ( dialog , dialogName );
+				setonResizeValues ( dialog , dialogKey );
 			}
 
 			@Override
 			public void componentMoved ( ComponentEvent e ) {
-				setonMovedValues ( dialog , dialogName );
+				setonMovedValues ( dialog , dialogKey );
 			}
 
 			@Override
 			public void componentShown ( ComponentEvent e ) {
-				setonShownValues ( dialog , dialogName );
+				setonShownValues ( dialog , dialogKey );
 			}
 		} );
 	}
@@ -253,13 +372,30 @@ public final class Persistence {
 	 * store.
 	 *
 	 * @param dialog
-	 * @param dialogName
+	 * @param dialogKey
 	 */
-	private void setonResizeValues ( JDialog dialog , String dialogName ) {
-		store.putInt ( dialogName + widthKey , dialog.getWidth ( ) );
-		store.putInt ( dialogName + heightKey , dialog.getHeight ( ) );
+	private void setonResizeValues ( JDialog dialog , String dialogKey ) {
+		store.putInt ( dialogKey + widthKey , dialog.getWidth ( ) );
+		store.putInt ( dialogKey + heightKey , dialog.getHeight ( ) );
 
 		push ();
+	}
+
+	/**
+	 *
+	 * @param chooser
+	 * @param chooserKey
+	 */
+	private void setonResizeValues (AMFileChooser chooser, String chooserKey) {
+		if (chooser.getDialog () != null) {
+			System.out.println("Resized" + chooserKey);
+			JDialog dialog = chooser.getDialog ();
+
+			store.putInt ( chooserKey + widthKey, dialog.getWidth () );
+			store.putInt ( chooserKey + heightKey, dialog.getHeight () );
+
+			push ();
+		}
 	}
 
 	/**
@@ -267,13 +403,30 @@ public final class Persistence {
 	 * store.
 	 *
 	 * @param dialog
-	 * @param dialogName
+	 * @param dialogKey
 	 */
-	private void setonMovedValues ( JDialog dialog , String dialogName ) {
-		store.putInt ( dialogName + xKey , dialog.getX () );
-		store.putInt ( dialogName + yKey , dialog.getY () );
+	private void setonMovedValues ( JDialog dialog , String dialogKey ) {
+		store.putInt ( dialogKey + xKey , dialog.getX () );
+		store.putInt ( dialogKey + yKey , dialog.getY () );
 
 		push ();
+	}
+
+	/**
+	 *
+	 * @param chooser
+	 * @param chooserKey
+	 */
+	private void setonMovedValues (AMFileChooser chooser, String chooserKey) {
+		if (chooser.getDialog () != null) {
+			System.out.println("Moved" + chooserKey);
+			JDialog dialog = chooser.getDialog ();
+
+			store.putInt ( chooserKey + xKey, dialog.getX ()  );
+			store.putInt ( chooserKey + yKey, dialog.getY () );
+
+			push ();
+		}
 	}
 
 	/**
@@ -282,58 +435,78 @@ public final class Persistence {
 	 * provided unique dialogName keys are supplied when registered.
 	 *
 	 * @param dialog
-	 * @param dialogName
+	 * @param dialogKey
 	 */
-	private void setonShownValues ( JDialog dialog , String dialogName ) {
-		int width = getKeyWidth ( dialog , dialogName );
-		int height = getKeyHeight ( dialog , dialogName );
-		int x = getKeyX ( dialog , dialogName );
-		int y = getKeyY ( dialog , dialogName );
+	private void setonShownValues ( JDialog dialog , String dialogKey ) {
+		int newWidth = getKeyWidth ( dialog , dialogKey );
+		int newHeight = getKeyHeight ( dialog , dialogKey );
+		int newX = getKeyX ( dialog , dialogKey );
+		int newY = getKeyY ( dialog , dialogKey );
 
-		dialog.setSize ( width , height );
-		dialog.setLocation ( x , y );
+		dialog.setSize ( newWidth , newHeight );
+		dialog.setLocation ( newX , newY );
+	}
+
+	/**
+	 *
+	 * @param chooser
+	 * @param chooserKey
+	 */
+	private void setonShownValues (AMFileChooser chooser, String chooserKey) {
+		if (chooser.getDialog () != null) {
+			System.out.println("Shown + " + chooserKey);
+			JDialog dialog = chooser.getDialog ();
+
+			int newWidth = getKeyWidth ( dialog , chooserKey );
+			int newHeight = getKeyHeight ( dialog , chooserKey );
+			int newX = getKeyX ( dialog , chooserKey);
+			int newY = getKeyY ( dialog , chooserKey );
+
+			chooser.setDialogSize ( newWidth, newHeight );
+			chooser.setDialogCoordinates ( newX, newY );
+		}
 	}
 
 	/**
 	 * Gets dialog width. This is just for tidiness.
 	 *
-	 * @param dialogName
+	 * @param dialogKey
 	 * @return
 	 */
-	private int getKeyWidth ( JDialog dialog , String dialogName ) {
-		return store.getInt ( dialogName + widthKey , dialog.getWidth ( ) );
+	private int getKeyWidth ( JDialog dialog , String dialogKey ) {
+		return store.getInt ( dialogKey + widthKey , dialog.getWidth ( ) );
 	}
 
 	/**
 	 * Gets dialog height. This is just for tidiness.
 	 *
 	 * @param dialog
-	 * @param dialogName
+	 * @param dialogKey
 	 * @return
 	 */
-	private int getKeyHeight ( JDialog dialog , String dialogName ) {
-		return store.getInt ( dialogName + heightKey , dialog.getHeight ( ) );
+	private int getKeyHeight ( JDialog dialog , String dialogKey ) {
+		return store.getInt ( dialogKey + heightKey , dialog.getHeight ( ) );
 	}
 
 	/**
 	 * Gets the dialog x coordinate. This is just for tidiness.
 	 *
 	 * @param dialog
-	 * @param dialogName
+	 * @param dialogKey
 	 * @return
 	 */
-	private int getKeyX ( JDialog dialog , String dialogName ) {
-		return store.getInt ( dialogName + xKey , Utils.getCenteredCoordinateX () );
+	private int getKeyX ( JDialog dialog , String dialogKey ) {
+		return store.getInt ( dialogKey + xKey , SystemUtils.getCenteredCoordinateX () );
 	}
 
 	/**
 	 * Gets the dialog y coordinate. This is just for tidiness.
 	 *
 	 * @param dialog
-	 * @param dialogName
+	 * @param dialogKey
 	 * @return
 	 */
-	private int getKeyY ( JDialog dialog , String dialogName ) {
-		return store.getInt ( dialogName + yKey , Utils.getCenteredCoordinateY () );
+	private int getKeyY ( JDialog dialog , String dialogKey ) {
+		return store.getInt ( dialogKey + yKey , SystemUtils.getCenteredCoordinateY () );
 	}
 }

@@ -1,4 +1,4 @@
-package com.github.errayeil.ui.Dialogs;
+package com.github.errayeil.ui.Dialogs.Panels;
 
 import com.alexandriasoftware.swing.JInputValidator;
 import com.alexandriasoftware.swing.JInputValidatorPreferences;
@@ -14,7 +14,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static com.github.errayeil.utils.Utils.createFiller;
+import static com.github.errayeil.utils.CompUtils.fill;
 import static io.codeworth.panelmatic.componentbehavior.Modifiers.GROW;
 import static io.codeworth.panelmatic.componentbehavior.Modifiers.L_CENTER;
 import static io.codeworth.panelmatic.util.Groupings.lineGroup;
@@ -24,7 +24,7 @@ import static io.codeworth.panelmatic.util.Groupings.lineGroup;
  * @version 0.1
  * @since 0.1
  */
-public class ChooseEditorPanel extends JComponent {
+public class CEPanel extends JComponent {
 
 	/**
 	 *
@@ -34,7 +34,7 @@ public class ChooseEditorPanel extends JComponent {
 	/**
 	 * @param forEditor Which file type we are registering the preference for .
 	 */
-	public ChooseEditorPanel ( String forEditor ) {
+	public CEPanel ( String forEditor ) {
 		JFileChooser chooser = new JFileChooser ( );
 		okButton = new JButton ( "Okay" );
 		JButton cancelButton = new JButton ( "Cancel" );
@@ -73,7 +73,7 @@ public class ChooseEditorPanel extends JComponent {
 				persist.registerDirectory ( persist.prefEditorKey + forEditor, path );
 			}
 
-			SwingUtilities.windowForComponent ( ChooseEditorPanel.this ).dispose ( );
+			SwingUtilities.windowForComponent ( CEPanel.this ).dispose ( );
 		};
 
 		ActionListener al2 = e -> {
@@ -133,11 +133,11 @@ public class ChooseEditorPanel extends JComponent {
 		useBIEditorCheck.addActionListener ( al3 );
 
 		PanelMatic.begin ( this )
-				.add ( lineGroup ( createFiller ( 1, 0 ), useBIEditorCheck ) , L_CENTER, GROW )
+				.add ( lineGroup ( fill ( 1, 0 ), useBIEditorCheck ) , L_CENTER, GROW )
 				.addFlexibleSpace ()
-				.add ( lineGroup( createFiller ( 5, 0 ), filePathField, createFiller ( 8, 0 ), fcButton, createFiller ( 5,0  )) )
+				.add ( lineGroup( fill ( 5, 0 ), filePathField, fill ( 8, 0 ), fcButton, fill ( 5,0  )) )
 				.addFlexibleSpace ()
-				.add ( lineGroup ( okButton, createFiller ( 5,0  ), cancelButton ), L_CENTER )
+				.add ( lineGroup ( okButton, fill ( 5,0  ), cancelButton ), L_CENTER )
 				.get (  );
 	}
 }

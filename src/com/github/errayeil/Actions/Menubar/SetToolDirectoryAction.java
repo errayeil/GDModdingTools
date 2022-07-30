@@ -1,9 +1,11 @@
 package com.github.errayeil.Actions.Menubar;
 
 import com.github.errayeil.Persistence.Persistence;
+import com.github.errayeil.ui.Window.AMMenubar;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
+import javax.swing.JMenuBar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -16,8 +18,16 @@ public class SetToolDirectoryAction implements ActionListener {
 	/**
 	 *
 	 */
+	private AMMenubar menubar;
+
+	/**
+	 *
+	 */
 	private JCheckBoxMenuItem item;
 
+	/**
+	 *
+	 */
 	private final String[] tools = { "AifEditor.exe" , "AnimationCompiler.exe" , "ArchiveTool.exe" , "AssetManager.exe" ,
 			"BitmapCreator.exe" , "ConversationEditor.exe" , "DBREditor.exe" , "Editor.exe" , "FontCompiler.exe" , "MapCompiler.exe" ,
 			"ModelCompiler.exe" , "PSEditor.exe" , "QuestEditor.exe" , "ShaderCompiler.exe" , "SourceServer.exe" , "TextureCompiler.exe" ,
@@ -26,7 +36,9 @@ public class SetToolDirectoryAction implements ActionListener {
 	/**
 	 * @param item
 	 */
-	public SetToolDirectoryAction ( JCheckBoxMenuItem item ) {
+	public SetToolDirectoryAction ( AMMenubar menubar,
+			JCheckBoxMenuItem item ) {
+		this.menubar = menubar;
 		this.item = item;
 	}
 
@@ -62,6 +74,9 @@ public class SetToolDirectoryAction implements ActionListener {
 
 				item.setSelected ( true );
 				item.setEnabled ( false );
+
+				menubar.reloadToolMenu ();
+				menubar.reloadCMDToolMenu ();
 			}
 		}
 	}

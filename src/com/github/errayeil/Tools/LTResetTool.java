@@ -1,6 +1,7 @@
 package com.github.errayeil.Tools;
 
-import com.github.errayeil.utils.Utils;
+import com.github.errayeil.utils.CompUtils;
+import com.github.errayeil.utils.ToolsUtils;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -27,17 +28,17 @@ public class LTResetTool {
      * Starts the process to reset a loot table.
      */
     public void start() {
-        JFileChooser chooser = Utils.getFileChooser("Select LT files to clear", JFileChooser.FILES_ONLY, true);
+        JFileChooser chooser = CompUtils.getFileChooser("Select LT files to clear", JFileChooser.FILES_ONLY, true);
 
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             File[] files = chooser.getSelectedFiles();
 
             for (File f : files) {
-                if (Utils.isValidLTFile(f)) {
+                if ( ToolsUtils.isValidLTFile(f)) {
                     List<String> lines = null;
                     List<String> modifiedLines = new ArrayList<>();
                     try {
-                        lines = Utils.readLinesFromFile(f);
+                        lines = ToolsUtils.readLinesFromRecord (f);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

@@ -1,6 +1,7 @@
 package com.github.errayeil.Tools;
 
-import com.github.errayeil.utils.Utils;
+import com.github.errayeil.utils.CompUtils;
+import com.github.errayeil.utils.ToolsUtils;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -57,14 +58,14 @@ public class LTWeightTool {
      *
      */
     private boolean getFile() {
-        JFileChooser chooser = Utils.getFileChooser("Choose LT file to write to", JFileChooser.FILES_ONLY, false);
+        JFileChooser chooser = CompUtils.getFileChooser("Choose LT file to write to", JFileChooser.FILES_ONLY, false);
 
         int option = chooser.showOpenDialog(null);
 
         if (option == JFileChooser.APPROVE_OPTION) {
             fileToWrite = chooser.getSelectedFile();
 
-            if (!Utils.isValidLTFile(fileToWrite))
+            if (!ToolsUtils.isValidLTFile(fileToWrite))
                 return false;
 
         } else {
@@ -88,15 +89,15 @@ public class LTWeightTool {
      * @throws IOException
      */
     private void write() throws IOException {
-        List<String> lines = Utils.readLinesFromFile(fileToWrite); //TODO Can make this only one list
+        List<String> lines = ToolsUtils.readLinesFromRecord (fileToWrite); //TODO Can make this only one list
         List<String> modified = new ArrayList<>();
 
         for (String line : lines) {
             if (line.contains("lootWeight") && !line.contains("Dyn")) {
                if (line.contains(",,")) {
-                  modified.add(Utils.replaceCommasWith(line, weightToWrite, false));
+                  modified.add( ToolsUtils.replaceCommasWith(line, weightToWrite, false));
                } else if (line.contains(",0,")) {
-                   modified.add(Utils.replaceCommasWith(line, weightToWrite, true));
+                   modified.add( ToolsUtils.replaceCommasWith(line, weightToWrite, true));
                }
             } else {
                 modified.add(line);

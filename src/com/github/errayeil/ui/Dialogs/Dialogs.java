@@ -4,6 +4,7 @@ import com.github.errayeil.ui.Dialogs.EntryData.FileChooserEntryData;
 import com.github.errayeil.ui.Dialogs.EntryData.NameToolEntryData;
 import com.github.errayeil.ui.Dialogs.EntryData.WeightToolEntryData;
 import com.github.errayeil.Persistence.Persistence;
+import com.github.errayeil.ui.Dialogs.Panels.*;
 
 import javax.swing.JDialog;
 import java.io.InputStream;
@@ -40,7 +41,7 @@ public class Dialogs {
 	 */
 	public static FileChooserEntryData showFileChooserDialog ( String dialogTitle , int selectionMode , boolean multiSelection ) {
 		JDialog dialog = new JDialog ( );
-		FileChooserPanel panel = new FileChooserPanel ( );
+		FCPanel panel = new FCPanel ( );
 
 		dialog.setTitle ( dialogTitle );
 		dialog.setContentPane ( panel );
@@ -71,7 +72,7 @@ public class Dialogs {
 	 */
 	public static NameToolEntryData showNTInputDialog ( String dialogTitle ) {
 		JDialog dialog = new JDialog ( );
-		LTNameToolInputPanel panel = new LTNameToolInputPanel ( );
+		LTNTPanel panel = new LTNTPanel ( );
 
 		dialog.setResizable ( false );
 		dialog.setTitle ( dialogTitle );
@@ -100,7 +101,7 @@ public class Dialogs {
 	 */
 	public static WeightToolEntryData showWTInputDialog ( String dialogTitle ) {
 		JDialog dialog = new JDialog ( );
-		LTWeightToolInputPanel panel = new LTWeightToolInputPanel ( );
+		LTWTPanel panel = new LTWTPanel ( );
 
 		dialog.setResizable ( false );
 		dialog.setTitle ( dialogTitle );
@@ -124,11 +125,11 @@ public class Dialogs {
 
 	/**
 	 * @param dialogTitle
-	 * @param forEditor   Either lua or text
+	 * @param forEditor   Either lua,txt, or img
 	 */
 	public static void showChooseEditorDialog ( String dialogTitle , String forEditor ) {
 		JDialog dialog = new JDialog ( );
-		ChooseEditorPanel panel = new ChooseEditorPanel ( forEditor );
+		CEPanel panel = new CEPanel ( forEditor );
 
 		dialog.setResizable ( false );
 		dialog.setTitle ( dialogTitle );
@@ -166,6 +167,72 @@ public class Dialogs {
 	 */
 	public static void showProgressDialog ( String dialogTitle , String message , InputStream progressStream ) {
 		JDialog dialog = new JDialog ( );
+	}
+
+	/**
+	 *
+	 * @param dialogTitle
+	 * @param updateMessage The update message returned when the built-in update checker receives a message.
+	 */
+	public static void showUpdateDialog( String dialogTitle, String updateMessage) {
+
+	}
+
+	/**
+	 *
+	 * @param dialogTitle The title of the dialog
+	 */
+	public static void showSetupDialog( String dialogTitle) {
+		JDialog dialog = new JDialog();
+		SSPanel panel = new SSPanel (dialog);
+
+		dialog.setResizable ( false );
+		dialog.setTitle ( dialogTitle );
+		dialog.setContentPane ( panel );
+
+		if ( config.hasBeenRegistered ( "suDialog" ) ) {
+			System.out.println ( "Registered" );
+			config.loadConfig ( dialog , "suDialog" );
+		} else {
+			System.out.println("Not registered");
+			dialog.setLocationRelativeTo ( null );
+			dialog.pack ( );
+		}
+
+		config.registerDialog ( dialog , "suDialog" );
+
+		dialog.setModal ( true );
+		dialog.setVisible ( true );
+	}
+
+	/**
+	 *
+	 * @param dialogTitle
+	 * @return
+	 */
+	public static String showInstalledAppListDialog(String dialogTitle) {
+		JDialog dialog = new JDialog();
+		IALPanel panel = new IALPanel ();
+
+		dialog.setResizable ( false );
+		dialog.setTitle ( dialogTitle );
+		dialog.setContentPane ( panel );
+
+		if ( config.hasBeenRegistered ( "ialDialog" ) ) {
+			System.out.println ( "Registered" );
+			config.loadConfig ( dialog , "ialDialog" );
+		} else {
+			System.out.println("Not registered");
+			dialog.setLocationRelativeTo ( null );
+			dialog.pack ( );
+		}
+
+		config.registerDialog ( dialog , "ialDialog" );
+
+		dialog.setModal ( true );
+		dialog.setVisible ( true );
+
+		return panel.getSelectedApp ();
 	}
 }
 

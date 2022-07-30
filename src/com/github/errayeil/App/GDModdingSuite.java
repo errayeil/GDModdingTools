@@ -1,11 +1,9 @@
 package com.github.errayeil.App;
 
-import com.github.errayeil.Persistence.PBackup;
-import com.github.errayeil.ui.Window.AMWindow;
-import com.github.errayeil.utils.Utils;
-
-import java.io.IOException;
-import java.util.prefs.BackingStoreException;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.github.errayeil.Persistence.Persistence;
+import com.github.errayeil.ui.Dialogs.Dialogs;
+import com.github.errayeil.utils.SystemUtils;
 
 /**
  * @author Errayeil
@@ -25,13 +23,10 @@ public class GDModdingSuite {
 	 * @param args
 	 */
 	public static void main ( String[] args ) {
-		Utils.setSystemUI ( );
+		SystemUtils.setSystemUI ( new FlatDarkLaf () );
 
-		PBackup backup = new PBackup ();
-		try {
-			backup.backupStore ();
-		} catch ( BackingStoreException | IOException e ) {
-			throw new RuntimeException ( e );
-		}
+		Persistence.getInstance ().clear ();
+
+		Dialogs.showSetupDialog ( "Setup now?" );
 	}
 }

@@ -40,7 +40,7 @@ public class AMWindow {
      *
      */
     public AMWindow() {
-        AMMenubar bar = new AMMenubar();
+        AMMenubar bar = new AMMenubar(this);
         frameMenuBar = bar.getMenubar();
         managerFrame = new JFrame("GDModdingTools AssetManager");
         outputList = new JList<>();

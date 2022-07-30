@@ -1,4 +1,4 @@
-package com.github.errayeil.ui.Dialogs;
+package com.github.errayeil.ui.Dialogs.Panels;
 
 import com.github.errayeil.ui.Dialogs.EntryData.FileChooserEntryData;
 import io.codeworth.panelmatic.PanelMatic;
@@ -10,11 +10,11 @@ import javax.swing.SwingUtilities;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import static com.github.errayeil.utils.Utils.createFiller;
+import static com.github.errayeil.utils.CompUtils.fill;
 import static io.codeworth.panelmatic.componentbehavior.Modifiers.*;
 import static io.codeworth.panelmatic.util.Groupings.lineGroup;
 
-public class FileChooserPanel extends JComponent {
+public class FCPanel extends JComponent {
 
 	/**
 	 *
@@ -34,7 +34,7 @@ public class FileChooserPanel extends JComponent {
 	/**
 	 *
 	 */
-	public FileChooserPanel ( ) {
+	public FCPanel ( ) {
 		chooser = new JFileChooser ( );
 		okButton = new JButton ( "Okay" );
 		data = new FileChooserEntryData ( );
@@ -55,7 +55,7 @@ public class FileChooserPanel extends JComponent {
 				data.selectedFiles = new File[ 0 ];
 			}
 
-			SwingUtilities.windowForComponent ( FileChooserPanel.this ).dispose ( );
+			SwingUtilities.windowForComponent ( FCPanel.this ).dispose ( );
 		};
 
 		okButton.setEnabled ( false );
@@ -76,8 +76,8 @@ public class FileChooserPanel extends JComponent {
 
 		PanelMatic.begin ( this )
 				.add ( chooser , GROW )
-				.add ( lineGroup ( okButton , createFiller ( 5 , 0 ) , cancelButton ) , L_CENTER , P_FEET )
-				.add ( createFiller ( 0 , 5 ) , L_CENTER )
+				.add ( lineGroup ( okButton , fill ( 5 , 0 ) , cancelButton ) , L_CENTER , P_FEET )
+				.add ( fill ( 0 , 5 ) , L_CENTER )
 				.get ( );
 	}
 

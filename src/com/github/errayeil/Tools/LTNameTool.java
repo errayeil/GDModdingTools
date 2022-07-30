@@ -1,6 +1,7 @@
 package com.github.errayeil.Tools;
 
-import com.github.errayeil.utils.Utils;
+import com.github.errayeil.utils.CompUtils;
+import com.github.errayeil.utils.ToolsUtils;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -74,14 +75,14 @@ public class LTNameTool {
      * @return True or false if this process was completed
      */
     private boolean getLootTableFiles() {
-        JFileChooser chooser = Utils.getFileChooser("Select loot table files", JFileChooser.FILES_ONLY, true);
+        JFileChooser chooser = CompUtils.getFileChooser("Select loot table files", JFileChooser.FILES_ONLY, true);
 
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             File[] files = chooser.getSelectedFiles();
             lootTableFiles.addAll(Arrays.asList(files));
 
             for (File f : lootTableFiles) {
-                if (!Utils.isValidLTFile(f)) {
+                if (!ToolsUtils.isValidLTFile(f)) {
                     JOptionPane.showMessageDialog(null, "The selected file(s) is not a valid loot table.", "Invalid File", JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
@@ -98,7 +99,7 @@ public class LTNameTool {
      * @return True or false if this process was completed.
      */
     private boolean getRecordsToWrite() {
-        JFileChooser chooser = Utils.getFileChooser("Choose directory of records", JFileChooser.DIRECTORIES_ONLY, false);
+        JFileChooser chooser = CompUtils.getFileChooser("Choose directory of records", JFileChooser.DIRECTORIES_ONLY, false);
 
         File directory = null;
 
@@ -114,7 +115,7 @@ public class LTNameTool {
             assert files != null; //Change from assert to different null check, assert doesn't work outside of dev , right??
             for (File f : files) {
                 String path = f.getAbsolutePath();
-                records.add(Utils.trimRecord(path)); //Utility call to trim off the parts of the path we don't need and replace all backslash with forward slash
+                records.add( ToolsUtils.trimRecord(path)); //Utility call to trim off the parts of the path we don't need and replace all backslash with forward slash
             }
         } else {
             return false;
@@ -133,12 +134,12 @@ public class LTNameTool {
         recordsIndex = 0;
 
         for (File f : lootTableFiles) {
-            List<String> lines = Utils.readLinesFromFile(f);
+            List<String> lines = ToolsUtils.readLinesFromRecord (f);
             originalLines.put(f, lines);
         }
 
         for (File key : originalLines.keySet()) {
-            if (Utils.isLTListTable(key)) { //Checks for a certain type of loot table file
+            if ( ToolsUtils.isLTListTable(key)) { //Checks for a certain type of loot table file
                 writeList(key, originalLines.get(key), modifiedLines);
             } else {
                 writeNonList(key, originalLines.get(key), modifiedLines);
@@ -213,7 +214,7 @@ public class LTNameTool {
         for (String line : lines) {
             if (line.contains("lootName") && !line.contains("Dyn") && !recordsDone) {
                 if (line.contains(",,")) {
-                    modified.add(Utils.replaceCommasWith(line, records.get(recordsIndex), false));
+                    modified.add( ToolsUtils.replaceCommasWith(line, records.get(recordsIndex), false));
                     recordsIndex++;
 
                     if (recordsIndex == records.size()) {

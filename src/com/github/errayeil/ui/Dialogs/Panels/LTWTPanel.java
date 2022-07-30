@@ -1,10 +1,11 @@
-package com.github.errayeil.ui.Dialogs;
+package com.github.errayeil.ui.Dialogs.Panels;
 
 import com.alexandriasoftware.swing.JInputValidator;
 import com.alexandriasoftware.swing.JInputValidatorPreferences;
 import com.alexandriasoftware.swing.Validation;
 import com.github.errayeil.ui.Dialogs.EntryData.WeightToolEntryData;
-import com.github.errayeil.utils.Utils;
+import com.github.errayeil.utils.CompUtils;
+import com.github.errayeil.utils.ToolsUtils;
 import io.codeworth.panelmatic.PanelMatic;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -13,7 +14,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import static com.github.errayeil.utils.Utils.createFiller;
+import static com.github.errayeil.utils.CompUtils.fill;
 import static io.codeworth.panelmatic.componentbehavior.Modifiers.L_CENTER;
 import static io.codeworth.panelmatic.componentbehavior.Modifiers.L_START;
 import static io.codeworth.panelmatic.util.Groupings.lineGroup;
@@ -23,7 +24,7 @@ import static io.codeworth.panelmatic.util.Groupings.lineGroup;
  * @version 1.0
  * @since 1.0
  */
-public class LTWeightToolInputPanel extends JComponent {
+public class LTWTPanel extends JComponent {
 
 	/**
 	 *
@@ -58,7 +59,7 @@ public class LTWeightToolInputPanel extends JComponent {
 	/**
 	 *
 	 */
-	public LTWeightToolInputPanel ( ) {
+	public LTWTPanel ( ) {
 		okButton = new JButton ( "Okay" );
 		lootTableFileField = new JTextField ( 30 );
 		lootWeightField = new JTextField ( 30 );
@@ -76,14 +77,14 @@ public class LTWeightToolInputPanel extends JComponent {
 		wHeader.setFont ( font );
 
 		ActionListener al = e -> {
-			SwingUtilities.windowForComponent ( LTWeightToolInputPanel.this ).dispose ( );
+			SwingUtilities.windowForComponent ( LTWTPanel.this ).dispose ( );
 		};
 
 		okButton.addActionListener ( al );
 		cancelButton.addActionListener ( al );
 
 		lootTableFCButton.addActionListener ( ( a ) -> {
-			JFileChooser chooser = Utils.getFileChooser ( "Choose loot table file" , 0 , false );
+			JFileChooser chooser = CompUtils.getFileChooser ( "Choose loot table file" , 0 , false );
 
 			if ( chooser.showOpenDialog ( null ) == JFileChooser.APPROVE_OPTION ) {
 				File selected = chooser.getSelectedFile ( );
@@ -98,7 +99,7 @@ public class LTWeightToolInputPanel extends JComponent {
 				String message = "";
 				Validation.Type type = Validation.Type.NONE;
 
-				if ( !Utils.isValidLTFile ( new File ( data.ltFilePath ) ) ) {
+				if ( !ToolsUtils.isValidLTFile ( new File ( data.ltFilePath ) ) ) {
 					message = "The selected loot table file is not a valid loot table.";
 					type = Validation.Type.WARNING;
 					fileValid = false;
@@ -132,12 +133,12 @@ public class LTWeightToolInputPanel extends JComponent {
 		} );
 
 		PanelMatic.begin ( this )
-				.add ( createFiller ( 1 , 0 ) , ltHeader , L_START )
-				.add ( lineGroup ( createFiller ( 5 , 5 ) , lootTableFileField , createFiller ( 5 , 5 ) , lootTableFCButton , createFiller ( 5 , 5 ) ) )
-				.add ( createFiller ( 1 , 0 ) , wHeader , L_START )
-				.add ( lineGroup ( createFiller ( 5 , 0 ) , lootWeightField , createFiller ( 5 , 0 ) ) )
+				.add ( fill ( 1 , 0 ) , ltHeader , L_START )
+				.add ( lineGroup ( fill ( 5 , 5 ) , lootTableFileField , fill ( 5 , 5 ) , lootTableFCButton , fill ( 5 , 5 ) ) )
+				.add ( fill ( 1 , 0 ) , wHeader , L_START )
+				.add ( lineGroup ( fill ( 5 , 0 ) , lootWeightField , fill ( 5 , 0 ) ) )
 				.addFlexibleSpace ( )
-				.add ( lineGroup ( okButton , createFiller ( 5 , 5 ) , cancelButton ) , L_CENTER )
+				.add ( lineGroup ( okButton , fill ( 5 , 5 ) , cancelButton ) , L_CENTER )
 				.addFlexibleSpace ( )
 				.get ( );
 	}

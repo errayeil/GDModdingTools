@@ -3,7 +3,7 @@ package com.github.errayeil.ui.Window;
 import com.github.errayeil.Actions.Menubar.*;
 import com.github.errayeil.GD.GDTProcessBuilder;
 import com.github.errayeil.Persistence.Persistence;
-import com.github.errayeil.utils.Utils;
+import com.github.errayeil.utils.SystemUtils;
 
 import javax.swing.*;
 import java.awt.Component;
@@ -11,6 +11,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class AMMenubar {
+
+
+    /**
+     *
+     */
+    private AMWindow window;
 
     /**
      *
@@ -20,25 +26,34 @@ public class AMMenubar {
     /**
      *
      */
+    private JMenu modsMenu;
+    private JMenu toolsMenu;
+    private JMenu gdToolsMenu;
+    private JMenu gdCmdToolsMenu;
+
+    /**
+     *
+     */
     private Persistence config = Persistence.getInstance ();
 
     /**
      *
      */
-    public AMMenubar() {
+    public AMMenubar(final AMWindow window) {
         menubar = new JMenuBar();
+        this.window = window;
 
         JMenu fileMenu = new JMenu("File");
         JMenu viewMenu = new JMenu("View");
-        JMenu modsMenu = new JMenu("Mods");
         JMenu buildMenu = new JMenu("Build");
         JMenu archiveMenu = new JMenu("Archive");
         JMenu dbMenu = new JMenu("Database");
         JMenu resourceMenu = new JMenu("Resources");
-        JMenu toolsMenu = new JMenu("Tools");
-        JMenu gdToolsMenu = new JMenu("GD Tools");
-        JMenu gdCmdToolsMenu = new JMenu("GD command line tools");
         JMenu settingsMenu = new JMenu("Settings");
+        modsMenu = new JMenu("Mods");
+        toolsMenu = new JMenu("Tools");
+        gdToolsMenu = new JMenu("GD Tools");
+        gdCmdToolsMenu = new JMenu("GD command line tools");
 
         JMenuItem runGDItem = new JMenuItem ( "Run Grim Dawn"  );
         JMenuItem newModItem = new JMenuItem("Create new mod");
@@ -101,7 +116,7 @@ public class AMMenubar {
         docksMenu.addSeparator ();
         docksMenu.add ( pendingItem );
 
-        addModMenuItems(modsMenu);
+        addModMenuItems();
 
         buildMenu.add(buildarzItem);
         buildMenu.addSeparator();
@@ -152,9 +167,9 @@ public class AMMenubar {
         prefTxtItem.addActionListener ( new SetPrefEditorAction ( prefTxtItem, "txt" ) );
 
         setGDDirItem.addActionListener ( new SetGDDirectoryAction (setGDDirItem) );
-        setToolDirItem.addActionListener ( new SetToolDirectoryAction ( setToolDirItem ) );
+        setToolDirItem.addActionListener ( new SetToolDirectoryAction ( this, setToolDirItem ) );
         setWorkingDirItem.addActionListener ( new SetWorkspaceDirectoryAction ( setWorkingDirItem ) );
-        setModsDirItem.addActionListener ( new SetBuildDirectoryAction (setModsDirItem) );
+        setModsDirItem.addActionListener ( new SetBuildDirectoryAction (this, setModsDirItem) );
 
         if (config.hasBeenRegistered ( config.gdDirKey )) {
             setGDDirItem.setSelected ( true );
@@ -164,8 +179,8 @@ public class AMMenubar {
         if (config.hasBeenRegistered ( config.gdToolDirKey )) {
             setToolDirItem.setSelected ( true );
             setToolDirItem.setEnabled ( false );
-            addUIToolsItems(gdToolsMenu);
-            addCmdToolsItems(gdCmdToolsMenu);
+            addUIToolsItems();
+            addCmdToolsItems();
         }
 
         if (config.hasBeenRegistered ( config.gdWorkingDirKey )) {
@@ -204,13 +219,15 @@ public class AMMenubar {
 
     /**
      *TODO
-     * @param modsMenu
+     * @param
      */
-    private void addModMenuItems(JMenu modsMenu) {
+    private void addModMenuItems() {
         if (config.hasBeenRegistered ( config.gdBuildDirKey )) {
-            String path = config.getDirectory ( config.gdBuildDirKey ) + File.separator + "mods";
+            String path = config.getDirectory ( config.gdBuildDirKey );
+            System.out.println(path);
             File[] files = new File(path).listFiles ();
 
+            assert files != null;
             for (File f : files) {
                 if (f.isDirectory ()) {
                     JMenuItem item = new JMenuItem(f.getName ());
@@ -224,24 +241,24 @@ public class AMMenubar {
 
     /**
      *
-     * @param toolsMenu
+     * @param
      */
-    private void addUIToolsItems(JMenu toolsMenu) {
+    private void addUIToolsItems() {
         String[] tools = {"Animation Editor", "Bitmap Creator", "Conversation Editor", "DBR Editor", "World Editor",
         "Particle Effect Editor", "Quest Editor", "Texture Viewer", "Mesh Editor"};
 
         for (String s : tools) {
             JMenuItem item = new JMenuItem(s);
-            toolsMenu.add(item);
+            gdToolsMenu.add(item);
         }
 
-        configureItems ( toolsMenu.getMenuComponents());
+        configureItems ( gdToolsMenu.getMenuComponents());
     }
 
     /**
      *
      */
-    private void addCmdToolsItems(JMenu cmdToolsMenu ) {
+    private void addCmdToolsItems() {
         String[] tools = {"Animation Compiler", "Archive Tool", "Font compiler", "Map compiler", "Model Compiler",
         "Shader compiler", "Texture Compiler"};
 
@@ -263,10 +280,10 @@ public class AMMenubar {
                 //TODO
             };
 
-            item.setIcon ( Utils.getSystemIcon ( path ) );
+            item.setIcon ( SystemUtils.getSystemIcon ( path ) );
             item.setToolTipText ( path );
             item.addActionListener ( al );
-            cmdToolsMenu.add ( item );
+            gdCmdToolsMenu.add ( item );
         }
     }
 
@@ -305,9 +322,35 @@ public class AMMenubar {
                 builder.runToolAt ( new File (item.getToolTipText ()) );
             };
 
-            item.setIcon ( Utils.getSystemIcon ( path) );
+            item.setIcon ( SystemUtils.getSystemIcon ( path) );
             item.setToolTipText ( path );
             item.addActionListener ( al );
         }
+    }
+
+    /**
+     * If any of the menubar menus are dependent on the information in a directory,
+     * this reloads those menus.
+     */
+    public void reloadModMenu () {
+        Component[] comps =  modsMenu.getMenuComponents ();
+
+        for (Component c : comps) {
+            JMenuItem item = (JMenuItem ) c;
+            modsMenu.remove ( item );
+        }
+
+        addModMenuItems ();
+    }
+
+    /**
+     *
+     */
+    public void reloadToolMenu() {
+        addUIToolsItems();
+    }
+
+    public void reloadCMDToolMenu() {
+        addCmdToolsItems();
     }
 }

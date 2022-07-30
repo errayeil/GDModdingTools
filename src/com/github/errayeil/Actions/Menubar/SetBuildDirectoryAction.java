@@ -1,6 +1,7 @@
 package com.github.errayeil.Actions.Menubar;
 
 import com.github.errayeil.Persistence.Persistence;
+import com.github.errayeil.ui.Window.AMMenubar;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
@@ -18,13 +19,19 @@ public class SetBuildDirectoryAction implements ActionListener {
 	/**
 	 *
 	 */
+	private AMMenubar menubar;
+
+	/**
+	 *
+	 */
 	private JCheckBoxMenuItem item;
 
 	/**
 	 *
 	 * @param item
 	 */
-	public SetBuildDirectoryAction(JCheckBoxMenuItem item) {
+	public SetBuildDirectoryAction( AMMenubar menubar, JCheckBoxMenuItem item) {
+		this.menubar = menubar;
 		this.item = item;
 	}
 
@@ -49,6 +56,8 @@ public class SetBuildDirectoryAction implements ActionListener {
 
 			item.setSelected ( true );
 			item.setEnabled ( false );
+
+			menubar.reloadModMenu ();
 		}
 	}
 }
