@@ -10,7 +10,6 @@ import com.github.errayeil.ui.finder.Sort.FileTypeSort;
 
 import javax.swing.JList;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import java.awt.Desktop;
 import java.awt.Desktop.Action;
 import java.awt.event.MouseAdapter;
@@ -126,7 +125,6 @@ public class FinderList extends JList<java.io.File> {
 
 		setModel ( model );
 		setCellRenderer ( renderer );
-
 		setRoot ( rootDirectory );
 
 		/*
@@ -137,7 +135,7 @@ public class FinderList extends JList<java.io.File> {
 		addMouseListener ( new MouseAdapter ( ) {
 			@Override
 			public void mouseClicked ( MouseEvent e ) {
-				if ( SwingUtilities.isRightMouseButton ( e ) ) {
+				if ( SwingUtilities.isRightMouseButton ( e )  ) {
 					int index = locationToIndex ( e.getPoint ( ) );
 
 					//Helps ensure the correct index is selected.
@@ -150,7 +148,6 @@ public class FinderList extends JList<java.io.File> {
 
 		setFixedCellHeight ( 26 );
 		setFixedCellWidth ( 150 );
-		//setPrototypeCellValue ( new File ( System.getProperty ( "user.home" ) ) );
 	}
 
 	/**
@@ -174,16 +171,16 @@ public class FinderList extends JList<java.io.File> {
 		}
 
 		if ( !persist.getFinderValue ( Keys.showHiddenKey ) ) {
-			files.removeAll ( hiddenFiles.keySet () );
+			files.removeAll ( hiddenFiles.keySet ( ) );
 		}
 
 		if ( activeFilter != null && !activeFilter.getName ( ).equals ( Keys.allFilterKey ) ) {
 			applyFilter ( );
-		} else if (activeFilter == null || activeFilter.getName ().equals ( Keys.allFilterKey )) {
+		} else if ( activeFilter == null || activeFilter.getName ( ).equals ( Keys.allFilterKey ) ) {
 			/*
 			 * Sort the file list by type (directory or file) first and then sort by name.
-             * I made this type of comment because I had something else to write but I forgot what it was.
-             * Oh well.
+			 * I made this type of comment because I had something else to write, but I forgot what it was.
+			 * Oh well.
 			 */
 			files.sort ( new FileTypeSort ( false ).thenComparing ( new FileNameSort ( false ) ) );
 		}
@@ -195,16 +192,27 @@ public class FinderList extends JList<java.io.File> {
 	 * Applies the FinderFilter.
 	 */
 	private void applyFilter ( ) {
-		FilterWorker worker = new FilterWorker ( activeFilter, filteredFiles, this );
-		worker.execute ();
+		FilterWorker worker = new FilterWorker ( activeFilter , filteredFiles , this );
+		worker.execute ( );
 	}
 
 	/**
 	 * Applies the active sort.
 	 */
 	private void applySort ( ) {
-		final SortWorker worker = new SortWorker ( this, activeSort );
-		worker.execute ();
+		final SortWorker worker = new SortWorker ( this , activeSort );
+		worker.execute ( );
+	}
+
+	/**
+	 * Tells the FinderList to update its view of the root directory.
+	 * This should be called if a "listener" has been placed on the root directory
+	 * to identify changes. If changes occur this can be called for the FinderList
+	 * to reflect those changes.
+	 * @TODO: DO this
+	 */
+	public void updateList() {
+
 	}
 
 	/**
@@ -291,8 +299,6 @@ public class FinderList extends JList<java.io.File> {
 	 * Null finder filters will reset the list to show all files/folders in the root directory.
 	 *
 	 * @param filter
-	 *
-	 * @TODO: This method is messy and definitely can be optimized, BUT it is functional for now so I'll move onto other things.
 	 */
 	public void setFinderFilter ( FinderFilter filter ) {
 		this.activeFilter = filter;
@@ -337,7 +343,7 @@ public class FinderList extends JList<java.io.File> {
 	/**
 	 * Sets if the file stats should display in the list cells.
 	 * This causes the FinderList to repaint.
-	 *
+	 * @TODO: Possible swing worker worthy? It be wanting a worker. ;)
 	 * @param showStats
 	 */
 	public void setShowFileStats ( boolean showStats ) {
