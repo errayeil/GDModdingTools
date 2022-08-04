@@ -1,5 +1,6 @@
 package com.github.errayeil.Actions.Menubar;
 
+import com.github.errayeil.Persistence.Persistence.Keys;
 import com.github.errayeil.ui.Dialogs.Dialogs;
 import com.github.errayeil.Persistence.Persistence;
 
@@ -20,7 +21,7 @@ public class OpenGDDirAction implements ActionListener {
 	public void actionPerformed ( ActionEvent e ) {
 		Desktop desktop = Desktop.getDesktop ();
 		Persistence persist = Persistence.getInstance ();
-		String path = config.getDirectory ( persist.gdDirKey );
+		String path = config.getDirectory ( Keys.gdDirKey );
 
 		if (path != null) {
 			try {

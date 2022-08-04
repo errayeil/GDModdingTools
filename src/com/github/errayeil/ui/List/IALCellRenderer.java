@@ -1,7 +1,6 @@
-package com.github.errayeil.ui.Custom;
+package com.github.errayeil.ui.List;
 
 import com.github.errayeil.ListApps.Software;
-import org.apache.commons.io.FilenameUtils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;

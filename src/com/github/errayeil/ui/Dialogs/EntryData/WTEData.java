@@ -1,6 +1,6 @@
 package com.github.errayeil.ui.Dialogs.EntryData;
 
-public class WeightToolEntryData implements EntryData {
+public class WTEData implements EntryData {
 
     /**
      *
@@ -15,7 +15,7 @@ public class WeightToolEntryData implements EntryData {
     /**
      *
      */
-    public WeightToolEntryData() {
+    public WTEData () {
 
     }
 }

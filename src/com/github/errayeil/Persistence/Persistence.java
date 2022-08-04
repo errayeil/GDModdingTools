@@ -1,13 +1,11 @@
 package com.github.errayeil.Persistence;
 
-import com.github.errayeil.ui.Custom.AMFileChooser;
 import com.github.errayeil.utils.SystemUtils;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.File;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -18,11 +16,9 @@ import java.util.prefs.Preferences;
  * possible. All dialog sizes, positions, directories, and the list goes on is remembered and utilized via this instance
  * wrapper. <br>
  *
- *
- *
- * @// TODO: File backup of Preferences node:  &#10060;
- * @// TODO: Code Refactoring:  &#10060
- * @// TODO: Documentation:  &#10060;
+ * @TODO: File backup of Preferences node:  &#10060
+ * @TODO: Code Refactoring:  &#10060
+ * @TODO: Documentation:  &#10060
  *
  *
  * @see Preferences
@@ -43,88 +39,143 @@ public final class Persistence {
 	private Preferences store;
 
 	/**
-	 *
+	 * If changes are allowed to be made to the preferences store.
+	 * This is used for testing purposes.
 	 */
 	private boolean allowChanges = true;
 
 	/**
-	 * Below you will find a ton of public final String keys used for
-	 * registering preferences to the preferences store. The point is to make it easier
-	 * to write to the preferences store and minimizing mistakes. I think the variable names
-	 * are descriptive enough but I'm happy to refactor them as needed.
+	 * Returns the instance of Persistence.
+	 * @return
 	 */
+	public static Persistence getInstance ( ) {
+		if ( instance == null )
+			instance = new Persistence ( );
 
-	/*
-	 * Keys for file choosers.
-	 */
-	public final String currentDirKey = "-currentDir";
+		return instance;
+	}
 
-	/*
-	 * Keys for registering dialog size and width.
+	/**
+	 * Static class that contains all the String keys used for the Perferences store.
 	 */
-	public final String widthKey = "-width";
-	public final String heightKey = "-height";
-	public final String xKey = "-x";
-	public final String yKey = "-y";
+	public static class Keys {
 
-	/*
-	 * Keys for registering grim dawn modding directories.
-	 */
-	public final String pathKey = "-path";
-	public final String gdDirKey = "gdDir";
-	public final String gdBuildDirKey = "gdBuildDir";
-	public final String gdWorkingDirKey = "gdWorkingDir";
-	public final String gdToolDirKey = "gdToolsDir";
-	public final String workspaceDirKey = "workspaceDir";
-	public final String exportedTexDirKey = "exportedTexDir";
-	public final String exportedPakDirKey = "exportedPakDir";
-	public final String backupDirKey = "backupDir";
-	public final String gdExeDirKey = "grim dawn.exe-path";
+		/**
+		 * Below you will find a ton of public static String keys used for
+		 * registering preferences to the preferences store. The point is to make it easier
+		 * to write to the preferences store and minimizing mistakes. I think the variable names
+		 * are descriptive enough but I'm happy to refactor them as needed.
+		 */
 
-	/*
-	 * Keys for GD modding tools.
-	 */
-	public final String aifEditorKey = "aifeditor.exe-path";
-	public final String animCompKey = "animationcompiler.exe-path";
-	public final String archiveToolKey = "archivetool.exe-path";
-	public final String assetManageKey = "assetManager.exe-path";
-	public final String bitmapCreateKey = "bitmapcreator.exe-path";
-	public final String convoEditKey = "conversationeditor.exe-path";
-	public final String dbrEditorKey = "dbreditor.exe-path";
-	public final String worldEditorKey = "editor.exe-path";
-	public final String fontCompileKey = "fontcompiler.exe-path";
-	public final String mapCompileKey = "mapcompile.exe-path";
-	public final String modelCompileKey = "modelcompiler.exe-path";
-	public final String psEditorKey = "pseditor.exe-path";
-	public final String questEditKey = "questeditor.exe-path";
-	public final String shaderCompileKey = "shadercompiler.exe-path";
-	public final String sourceServerKey = "sourceserver.exe-path";
-	public final String texCompileKey = "texturecompiler.exe-path";
-	public final String texViewerKey = "texviewer.exe-path";
-	public final String meshViewerKey = "viewer.exe-path";
+		/*
+		 * Keys for the File Finder.
+		 */
+		public static final String currentDirKey = "Finder.currentDirectory";
+		public static final String showHiddenKey = "Finder.List.showHidden";
+		public static final String showFileStatsKey = "Finder.List.showFileStats";
+		public static final String sortNameAscendKey = "Finder.sortByNameAscend";
+		public static final String sortTypeAscendKey = "Finder.sortByTypeAscend";
+		public static final String sortSizeAscendKey = "Finder.sortBySizeAscend";
+		public static final String sortNameDescendKey = "Finder.sortByNameDescend";
+		public static final String sortTypeDescendKey = "Finder.sortByTypeDescend";
+		public static final String sortSizeDescendKey = "Finder.sortBySizeDescend";
+		public static final String sortFilesKey = "Finder.sortByFilesFirst";
+		public static final String sortFoldersKey = "Finder.sortByFoldersFirst";
+		public static final String fileFilterKey = "Finder.fileFilter";
 
-	/*
-	 * Keys for registering preferred editors for lua, txt, and image type files.
-	 */
-	public final String prefEditorKey = "prefEditorFor";
-	public final String luaKey = "lua";
-	public final String txtKey = "txt";
-	public final String imgKey = "img";
-	public final String builtInKey = "USE BUILT-IN";
+		/*
+		 * Finder filter keys.
+		 */
+		public static final String allFilterKey = "FinderFilter.All";
+		public static final String anmFilterKey = "FinderFilter.Anm";
+		public static final String arcFilterKey = "FinderFilter.Arc\\z";
+		public static final String cnvFilterKey = "FinderFilter.Cnv";
+		public static final String dbrFilterKey = "FinderFilter.Dbr";
+		public static final String fntFilterKey = "FinderFilter.Fnt";
+		public static final String luaFilterKey = "FinderFilter.Lua";
+		public static final String mshFilterKey = "FinderFilter.Mesh";
+		public static final String pfxFilterKey = "FinderFilter.Pfx";
+		public static final String qstFilterKey = "FinderFilter.Qst";
+		public static final String sshFilterKey = "FinderFilter.Ssh";
+		public static final String texFilterKey = "FinderFilter.Tex";
+		public static final String tplFilterKey = "FinderFilter.Tpl";
+		public static final String txtFilterKey = "FinderFilter.Txt";
+		public static final String wavFilterKey = "FinderFilter.Wav";
+		public static final String gdfFilterKey = "FinderFilter.gdFiles";
+		public static final String lvlFilterKey = "FinderFilter.gdLvlFiles";
+		public static final String ptfFilterKey = "FinderFilter.plainTxtFiles";
 
-	/*
-	 * Key for registering setup completion.
-	 */
-	public final String setupCompleteKey = "setup-completed";
 
-	/*
-	 * Keys for registering GDModdingSuite directories.
-	 */
-	public final String suiteInstallDirKey = "suiteInstallDir";
-	public final String suiteLogFileDirKey = "suiteLogFileDir";
-	public final String suiteUpdateDirKey = "suiteUpdateDir";
-	public final String suiteLogFilePathKey = "suiteLogFilePath";
-	public final String suiteVersionKey = "suiteVersion";
+		/*
+		 * Keys for registering dialog size and width.
+		 */
+		public static final String widthKey = "Dialog.width";
+		public static final String heightKey = "Dialog.height";
+		public static final String xKey = "Dialog.x";
+		public static final String yKey = "Dialog.y";
+
+		/*
+		 * Keys for registering grim dawn modding directories.
+		 */
+		public static final String pathKey = "-path";
+		public static final String gdDirKey = "Grim Dawn.installDirectory";
+		public static final String gdBuildDirKey = "Grim Dawn.buildDirectory";
+		public static final String gdWorkingDirKey = "Grim Dawn.workingDirectory";
+		public static final String gdToolDirKey = "Grim Dawn.toolsDirectory";
+		//public static final String workspaceDirKey = "workspaceDir";
+		public static final String exportedTexDirKey = "Grim Dawn.exportedTexDirectory";
+		public static final String exportedPakDirKey = "Grim Dawn.exportedPakDirectory";
+		public static final String backupDirKey = "Grim Dawn.backupsDirectory";
+		public static final String gdExeDirKey = "Grim Dawn.grimDawnExePath";
+
+		/*
+		 * Keys for GD modding tools.
+		 */
+		public static final String aifEditorKey = "aifeditor.exe-path";
+		public static final String animCompKey = "animationcompiler.exe-path";
+		public static final String archiveToolKey = "archivetool.exe-path";
+		public static final String assetManageKey = "assetManager.exe-path";
+		public static final String bitmapCreateKey = "bitmapcreator.exe-path";
+		public static final String convoEditKey = "conversationeditor.exe-path";
+		public static final String dbrEditorKey = "dbreditor.exe-path";
+		public static final String worldEditorKey = "editor.exe-path";
+		public static final String fontCompileKey = "fontcompiler.exe-path";
+		public static final String mapCompileKey = "mapcompile.exe-path";
+		public static final String modelCompileKey = "modelcompiler.exe-path";
+		public static final String psEditorKey = "pseditor.exe-path";
+		public static final String questEditKey = "questeditor.exe-path";
+		public static final String shaderCompileKey = "shadercompiler.exe-path";
+		public static final String sourceServerKey = "sourceserver.exe-path";
+		public static final String texCompileKey = "texturecompiler.exe-path";
+		public static final String texViewerKey = "texviewer.exe-path";
+		public static final String meshViewerKey = "viewer.exe-path";
+
+		/*
+		 * Keys for registering preferred editors for lua, txt, and image type files.
+		 */
+		public static final String prefEditorKey = "prefEditorFor";
+		public static final String luaKey = "lua";
+		public static final String txtKey = "txt";
+		public static final String imgKey = "img";
+		public static final String builtInKey = "USE BUILT-IN";
+
+		/*
+		 * Key for registering setup completion.
+		 */
+		public static final String setupCompleteKey = "setup-completed";
+
+		/*
+		 * Keys for registering GDModdingSuite directories.
+		 */
+		public static final String suiteInstallDirKey = "Suite.installDirectory";
+		public static final String suiteLogFileDirKey = "Suite.logFileDirectory";
+		public static final String suiteUpdateDirKey = "Suite.updateFileDirectory";
+		public static final String suiteLogFilePathKey = "Suite.logFilePath";
+		public static final String suiteVersionKey = "Suite.version";
+
+
+		private Keys() {}
+	}
 
 	/**
 	 * Private constructor to prevent out-of-scope initialization.
@@ -149,17 +200,6 @@ public final class Persistence {
 		} else {
 			//TODO logging
 		}
-	}
-
-	/**
-	 * Returns the instance of Persistence.
-	 * @return
-	 */
-	public static Persistence getInstance ( ) {
-		if ( instance == null )
-			instance = new Persistence ( );
-
-		return instance;
 	}
 
 	/**
@@ -194,11 +234,20 @@ public final class Persistence {
 	}
 
 	/**
+	 *
+	 * @param key
+	 */
+	public void remove(String key) {
+		store.remove ( key );
+		push ();
+	}
+
+	/**
 	 * Registers setup has been completed. Once this is registered, the app will load straight into
 	 * AssetManager, skipping the setup dialog.
 	 */
 	public void registerSetupCompletion() {
-		store.putBoolean ( setupCompleteKey, true );
+		store.putBoolean ( Keys.setupCompleteKey, true );
 		push();
 	}
 
@@ -215,7 +264,7 @@ public final class Persistence {
 	 * @return Boolean, ?what am I supposed to put here?
 	 */
 	public boolean isSetupCompleted() {
-		return store.getBoolean ( setupCompleteKey, false );
+		return store.getBoolean ( Keys.setupCompleteKey, false );
 	}
 
 	/**
@@ -227,11 +276,44 @@ public final class Persistence {
 	 * @return true or false if the key is registered.
 	 */
 	public boolean hasBeenRegistered ( String key ) {
-		if (key.contains ( widthKey ) || key.contains ( heightKey ) || key.contains ( xKey ) || key.contains ( yKey )) {
+		if (key.contains ( Keys.widthKey ) || key.contains ( Keys.heightKey ) || key.contains ( Keys.xKey ) || key.contains ( Keys.yKey )) {
 			return store.getInt ( key, -1 ) != -1;
 		}  else {
 			return !store.get ( key, "null" ).equals ( "null" );
 		}
+	}
+
+	/**
+	 *
+	 * @param finderKey
+	 * @return
+	 */
+	public boolean getFinderValue ( String finderKey) {
+		return store.getBoolean ( finderKey, false );
+	}
+
+	/**
+	 *
+	 * @param finderKey
+	 * @param finderValue
+	 */
+	public void setFinderValue (String finderKey, boolean finderValue) {
+		store.putBoolean ( finderKey, finderValue );
+
+		push ();
+	}
+
+	/**
+	 * Sets the value of the specified key for Finder related data.
+	 *
+	 * @see Keys
+	 * @param finderKey
+	 * @param finderValue
+	 */
+	public void setFinderValue ( String finderKey, String finderValue) {
+		store.put ( finderKey, finderValue );
+
+		push ();
 	}
 
 	/**
@@ -249,11 +331,11 @@ public final class Persistence {
 	 * @param chooser
 	 * @param chooserKey
 	 */
-	public void loadAndRegister( AMFileChooser chooser, String chooserKey) {
+	public void loadAndRegister( JFileChooser chooser, String chooserKey) {
 		if (hasBeenRegistered ( chooserKey )) {
 			loadConfig ( chooser, chooserKey );
 		} else {
-			chooser.setNullLocationRelative ( true );
+			//chooser.setNullLocationRelative ( true );
 		}
 		registerFileChooser ( chooser, chooserKey );
 	}
@@ -281,8 +363,8 @@ public final class Persistence {
 	 * @param chooser
 	 * @param chooserKey
 	 */
-	public void loadConfig ( AMFileChooser chooser , String chooserKey ) {
-		chooser.setCurrentDirectory ( new File ( store.get ( chooserKey + currentDirKey , System.getProperty ( "user.home" ) ) ) );
+	public void loadConfig ( JFileChooser chooser , String chooserKey ) {
+		//chooser.setCurrentDirectory ( new File ( store.get ( chooserKey + Keys.currentDirKey , System.getProperty ( "user.home" ) ) ) );
 
 		setonShownValues ( chooser, chooserKey );
 	}
@@ -302,24 +384,24 @@ public final class Persistence {
 	 * @param chooser
 	 * @param chooserKey
 	 */
-	public void registerFileChooser ( AMFileChooser chooser , String chooserKey ) {
-		chooser.addPropertyChangeListener ( evt -> {
-			String prop = evt.getPropertyName ( );
-
-			if ( prop.equals ( JFileChooser.DIRECTORY_CHANGED_PROPERTY ) ) {
-				File dir = chooser.getCurrentDirectory ( );
-
-				if ( dir != null ) {
-					store.put ( chooserKey + currentDirKey , dir.getAbsolutePath ( ) );
-
-					try {
-						store.flush ( );
-					} catch ( BackingStoreException e ) {
-						throw new RuntimeException ( e );
-					}
-				}
-			}
-		} );
+	public void registerFileChooser ( JFileChooser chooser , String chooserKey ) {
+//		chooser.addPropertyChangeListener ( evt -> {
+//			String prop = evt.getPropertyName ( );
+//
+//			if ( prop.equals ( JFileChooser.DIRECTORY_CHANGED_PROPERTY ) ) {
+//				File dir = chooser.getCurrentDirectory ( );
+//
+//				if ( dir != null ) {
+//					store.put ( chooserKey + Keys.currentDirKey , dir.getAbsolutePath ( ) );
+//
+//					try {
+//						store.flush ( );
+//					} catch ( BackingStoreException e ) {
+//						throw new RuntimeException ( e );
+//					}
+//				}
+//			}
+//		} );
 
 		ComponentAdapter adapter = new ComponentAdapter ( ) {
 			@Override
@@ -337,8 +419,6 @@ public final class Persistence {
 				setonShownValues ( chooser, chooserKey );
 			}
 		};
-
-		chooser.setComponentAdapter ( adapter );
 	}
 
 	/**
@@ -375,8 +455,8 @@ public final class Persistence {
 	 * @param dialogKey
 	 */
 	private void setonResizeValues ( JDialog dialog , String dialogKey ) {
-		store.putInt ( dialogKey + widthKey , dialog.getWidth ( ) );
-		store.putInt ( dialogKey + heightKey , dialog.getHeight ( ) );
+		store.putInt ( dialogKey + Keys.widthKey , dialog.getWidth ( ) );
+		store.putInt ( dialogKey + Keys.heightKey , dialog.getHeight ( ) );
 
 		push ();
 	}
@@ -386,16 +466,8 @@ public final class Persistence {
 	 * @param chooser
 	 * @param chooserKey
 	 */
-	private void setonResizeValues (AMFileChooser chooser, String chooserKey) {
-		if (chooser.getDialog () != null) {
-			System.out.println("Resized" + chooserKey);
-			JDialog dialog = chooser.getDialog ();
+	private void setonResizeValues (JFileChooser chooser, String chooserKey) {
 
-			store.putInt ( chooserKey + widthKey, dialog.getWidth () );
-			store.putInt ( chooserKey + heightKey, dialog.getHeight () );
-
-			push ();
-		}
 	}
 
 	/**
@@ -406,8 +478,8 @@ public final class Persistence {
 	 * @param dialogKey
 	 */
 	private void setonMovedValues ( JDialog dialog , String dialogKey ) {
-		store.putInt ( dialogKey + xKey , dialog.getX () );
-		store.putInt ( dialogKey + yKey , dialog.getY () );
+		store.putInt ( dialogKey + Keys.xKey , dialog.getX () );
+		store.putInt ( dialogKey + Keys.yKey , dialog.getY () );
 
 		push ();
 	}
@@ -417,16 +489,8 @@ public final class Persistence {
 	 * @param chooser
 	 * @param chooserKey
 	 */
-	private void setonMovedValues (AMFileChooser chooser, String chooserKey) {
-		if (chooser.getDialog () != null) {
-			System.out.println("Moved" + chooserKey);
-			JDialog dialog = chooser.getDialog ();
+	private void setonMovedValues (JFileChooser chooser, String chooserKey) {
 
-			store.putInt ( chooserKey + xKey, dialog.getX ()  );
-			store.putInt ( chooserKey + yKey, dialog.getY () );
-
-			push ();
-		}
 	}
 
 	/**
@@ -452,19 +516,8 @@ public final class Persistence {
 	 * @param chooser
 	 * @param chooserKey
 	 */
-	private void setonShownValues (AMFileChooser chooser, String chooserKey) {
-		if (chooser.getDialog () != null) {
-			System.out.println("Shown + " + chooserKey);
-			JDialog dialog = chooser.getDialog ();
+	private void setonShownValues (JFileChooser chooser, String chooserKey) {
 
-			int newWidth = getKeyWidth ( dialog , chooserKey );
-			int newHeight = getKeyHeight ( dialog , chooserKey );
-			int newX = getKeyX ( dialog , chooserKey);
-			int newY = getKeyY ( dialog , chooserKey );
-
-			chooser.setDialogSize ( newWidth, newHeight );
-			chooser.setDialogCoordinates ( newX, newY );
-		}
 	}
 
 	/**
@@ -474,7 +527,7 @@ public final class Persistence {
 	 * @return
 	 */
 	private int getKeyWidth ( JDialog dialog , String dialogKey ) {
-		return store.getInt ( dialogKey + widthKey , dialog.getWidth ( ) );
+		return store.getInt ( dialogKey + Keys.widthKey , dialog.getWidth ( ) );
 	}
 
 	/**
@@ -485,7 +538,7 @@ public final class Persistence {
 	 * @return
 	 */
 	private int getKeyHeight ( JDialog dialog , String dialogKey ) {
-		return store.getInt ( dialogKey + heightKey , dialog.getHeight ( ) );
+		return store.getInt ( dialogKey + Keys.heightKey , dialog.getHeight ( ) );
 	}
 
 	/**
@@ -496,7 +549,7 @@ public final class Persistence {
 	 * @return
 	 */
 	private int getKeyX ( JDialog dialog , String dialogKey ) {
-		return store.getInt ( dialogKey + xKey , SystemUtils.getCenteredCoordinateX () );
+		return store.getInt ( dialogKey + Keys.xKey , SystemUtils.getCenteredCoordinateX () );
 	}
 
 	/**
@@ -507,6 +560,6 @@ public final class Persistence {
 	 * @return
 	 */
 	private int getKeyY ( JDialog dialog , String dialogKey ) {
-		return store.getInt ( dialogKey + yKey , SystemUtils.getCenteredCoordinateY () );
+		return store.getInt ( dialogKey + Keys.yKey , SystemUtils.getCenteredCoordinateY () );
 	}
 }

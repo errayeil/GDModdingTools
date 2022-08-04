@@ -3,7 +3,7 @@ package com.github.errayeil.ui.Dialogs.Panels;
 import com.alexandriasoftware.swing.JInputValidator;
 import com.alexandriasoftware.swing.JInputValidatorPreferences;
 import com.alexandriasoftware.swing.Validation;
-import com.github.errayeil.ui.Dialogs.EntryData.NameToolEntryData;
+import com.github.errayeil.ui.Dialogs.EntryData.NTEData;
 import com.github.errayeil.utils.CompUtils;
 import com.github.errayeil.utils.ToolsUtils;
 import io.codeworth.panelmatic.PanelMatic;
@@ -43,7 +43,7 @@ public class LTNTPanel extends JComponent {
 	/**
 	 *
 	 */
-	private final NameToolEntryData data;
+	private final NTEData data;
 
 	/**
 	 *
@@ -62,7 +62,7 @@ public class LTNTPanel extends JComponent {
 		okButton = new JButton ( "Okay" );
 		lootTableFilesField = new JTextField ( 50 );
 		recordsDirectoryField = new JTextField ( 50 );
-		data = new NameToolEntryData ( );
+		data = new NTEData ( );
 		JButton cancelButton = new JButton ( "Cancel" );
 		JButton lootTableFCButton = new JButton ( "..." );
 		JButton recordDirectoryFCButton = new JButton ( "..." );
@@ -176,7 +176,7 @@ public class LTNTPanel extends JComponent {
 	 *
 	 * @return LTNameToolData class
 	 */
-	public NameToolEntryData getReturnData ( ) {
+	public NTEData getReturnData ( ) {
 		return data;
 	}
 

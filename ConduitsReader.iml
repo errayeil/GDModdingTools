@@ -19,5 +19,11 @@
     <orderEntry type="library" name="apache.tika.core" level="project" />
     <orderEntry type="library" name="commons-imaging-1.0-alpha3" level="project" />
     <orderEntry type="library" name="annotations" level="project" />
+    <orderEntry type="library" name="de.schlichtherle.truezip.swing" level="project" />
+    <orderEntry type="library" name="de.schlichtherle.truezip.driver.file" level="project" />
+    <orderEntry type="library" name="de.schlichtherle.truezip.driver.zip" level="project" />
+    <orderEntry type="library" name="de.schlichtherle.truezip.file" level="project" />
+    <orderEntry type="library" name="de.schlichtherle.truezip.kernel" level="project" />
+    <orderEntry type="library" name="de.schlichtherle.truezip.path" level="project" />
   </component>
 </module>

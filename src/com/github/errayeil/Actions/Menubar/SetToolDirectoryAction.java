@@ -1,11 +1,11 @@
 package com.github.errayeil.Actions.Menubar;
 
 import com.github.errayeil.Persistence.Persistence;
+import com.github.errayeil.Persistence.Persistence.Keys;
 import com.github.errayeil.ui.Window.AMMenubar;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
-import javax.swing.JMenuBar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -57,7 +57,7 @@ public class SetToolDirectoryAction implements ActionListener {
 
 		if ( selected != null ) {
 			if ( selected.isDirectory ( ) && selected.getName ( ).contains ( "Grim Dawn" ) ) {
-				persist.registerDirectory ( persist.gdToolDirKey, selected.getAbsolutePath () );
+				persist.registerDirectory ( Keys.gdToolDirKey, selected.getAbsolutePath () );
 				File[] files = selected.listFiles ( );
 
 				assert files != null;
@@ -67,7 +67,7 @@ public class SetToolDirectoryAction implements ActionListener {
 					for (String tool : tools) {
 						if (toolName.equals ( tool )) {
 							System.out.println(toolName);
-							persist.registerDirectory ( tool.toLowerCase () + persist.pathKey, f.getAbsolutePath ());
+							persist.registerDirectory ( tool.toLowerCase () + Keys.pathKey, f.getAbsolutePath ());
 						}
 					}
 				}

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="de.schlichtherle.truezip.kernel" type="repository">
+    <properties maven-id="de.schlichtherle.truezip:truezip-kernel:7.7.7" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/de/schlichtherle/truezip/truezip-kernel/7.7.7/truezip-kernel-7.7.7.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/de/schlichtherle/truezip/truezip-kernel/7.7.7/truezip-kernel-7.7.7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

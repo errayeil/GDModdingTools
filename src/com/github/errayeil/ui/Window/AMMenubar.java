@@ -3,6 +3,7 @@ package com.github.errayeil.ui.Window;
 import com.github.errayeil.Actions.Menubar.*;
 import com.github.errayeil.GD.GDTProcessBuilder;
 import com.github.errayeil.Persistence.Persistence;
+import com.github.errayeil.Persistence.Persistence.Keys;
 import com.github.errayeil.utils.SystemUtils;
 
 import javax.swing.*;
@@ -168,42 +169,42 @@ public class AMMenubar {
 
         setGDDirItem.addActionListener ( new SetGDDirectoryAction (setGDDirItem) );
         setToolDirItem.addActionListener ( new SetToolDirectoryAction ( this, setToolDirItem ) );
-        setWorkingDirItem.addActionListener ( new SetWorkspaceDirectoryAction ( setWorkingDirItem ) );
+        setWorkingDirItem.addActionListener ( new SetWorkingDirectoryAction ( setWorkingDirItem ) );
         setModsDirItem.addActionListener ( new SetBuildDirectoryAction (this, setModsDirItem) );
 
-        if (config.hasBeenRegistered ( config.gdDirKey )) {
+        if (config.hasBeenRegistered ( Keys.gdDirKey )) {
             setGDDirItem.setSelected ( true );
             setGDDirItem.setEnabled ( false );
         }
 
-        if (config.hasBeenRegistered ( config.gdToolDirKey )) {
+        if (config.hasBeenRegistered ( Keys.gdToolDirKey )) {
             setToolDirItem.setSelected ( true );
             setToolDirItem.setEnabled ( false );
             addUIToolsItems();
             addCmdToolsItems();
         }
 
-        if (config.hasBeenRegistered ( config.gdWorkingDirKey )) {
+        if (config.hasBeenRegistered ( Keys.gdWorkingDirKey )) {
             setWorkingDirItem.setSelected ( true );
             setWorkingDirItem.setEnabled ( false );
         }
 
-        if (config.hasBeenRegistered ( config.gdBuildDirKey )) {
+        if (config.hasBeenRegistered ( Keys.gdBuildDirKey )) {
             setModsDirItem.setSelected ( true );
             setModsDirItem.setEnabled ( false );
         }
 
-        if (config.hasBeenRegistered ( config.prefEditorKey + "lua" )) {
+        if (config.hasBeenRegistered ( Keys.prefEditorKey + "lua" )) {
             prefLuaItem.setSelected ( true );
             prefLuaItem.setEnabled ( false );
         }
 
-        if (config.hasBeenRegistered ( config.prefEditorKey + "txt" )) {
+        if (config.hasBeenRegistered ( Keys.prefEditorKey + "txt" )) {
             prefTxtItem.setSelected ( true );
             prefTxtItem.setEnabled ( false );
         }
 
-        if (config.hasBeenRegistered ( config.prefEditorKey + "img")) {
+        if (config.hasBeenRegistered ( Keys.prefEditorKey + "img")) {
             prefImgItem.setSelected ( true );
             prefImgItem.setEnabled ( false );
         }
@@ -222,8 +223,8 @@ public class AMMenubar {
      * @param
      */
     private void addModMenuItems() {
-        if (config.hasBeenRegistered ( config.gdBuildDirKey )) {
-            String path = config.getDirectory ( config.gdBuildDirKey );
+        if (config.hasBeenRegistered ( Keys.gdBuildDirKey )) {
+            String path = config.getDirectory ( Keys.gdBuildDirKey );
             System.out.println(path);
             File[] files = new File(path).listFiles ();
 
@@ -267,12 +268,12 @@ public class AMMenubar {
             String path = "";
 
             switch ( tool ) {
-                case "Animation Compiler" -> path = config.getDirectory ( config.animCompKey );
-                case "Archive Tool" -> path = config.getDirectory ( config.archiveToolKey );
-                case "Font Compiler" -> path = config.getDirectory ( config.fontCompileKey );
-                case "Map Compiler" -> path = config.getDirectory ( config.modelCompileKey );
-                case "Shader Compiler" -> path = config.getDirectory ( config.shaderCompileKey );
-                case "Texture Compiler" -> path = config.getDirectory ( config.texCompileKey );
+                case "Animation Compiler" -> path = config.getDirectory ( Keys.animCompKey );
+                case "Archive Tool" -> path = config.getDirectory ( Keys.archiveToolKey );
+                case "Font Compiler" -> path = config.getDirectory ( Keys.fontCompileKey );
+                case "Map Compiler" -> path = config.getDirectory ( Keys.modelCompileKey );
+                case "Shader Compiler" -> path = config.getDirectory ( Keys.shaderCompileKey );
+                case "Texture Compiler" -> path = config.getDirectory ( Keys.texCompileKey );
             }
 
             ActionListener al = e -> {
@@ -280,7 +281,7 @@ public class AMMenubar {
                 //TODO
             };
 
-            item.setIcon ( SystemUtils.getSystemIcon ( path ) );
+            item.setIcon ( SystemUtils.getSystemIcon ( path) );
             item.setToolTipText ( path );
             item.addActionListener ( al );
             gdCmdToolsMenu.add ( item );
@@ -298,23 +299,23 @@ public class AMMenubar {
             String path = "";
             switch (item.getText()) {
                 case "Animation Editor" ->
-                        path = config.getDirectory ( config.aifEditorKey );
+                        path = config.getDirectory ( Keys.aifEditorKey );
                 case "Bitmap Creator" ->
-                        path = config.getDirectory ( config.bitmapCreateKey );
+                        path = config.getDirectory ( Keys.bitmapCreateKey );
                 case "Conversation Editor" ->
-                        path = config.getDirectory ( config.convoEditKey );
+                        path = config.getDirectory ( Keys.convoEditKey );
                 case "DBR Editor" ->
-                        path = config.getDirectory ( config.dbrEditorKey );
+                        path = config.getDirectory ( Keys.dbrEditorKey );
                 case "World Editor" ->
-                        path = config.getDirectory ( config.worldEditorKey );
+                        path = config.getDirectory ( Keys.worldEditorKey );
                 case "Particle Effect Editor" ->
-                        path = config.getDirectory ( config.psEditorKey );
+                        path = config.getDirectory ( Keys.psEditorKey );
                 case "Quest Editor" ->
-                        path = config.getDirectory ( config.questEditKey );
+                        path = config.getDirectory ( Keys.questEditKey );
                 case "Texture Viewer" ->
-                        path = config.getDirectory ( config.texViewerKey );
+                        path = config.getDirectory ( Keys.texViewerKey );
                 case "Mesh Editor" ->
-                        path = config.getDirectory ( config.meshViewerKey );
+                        path = config.getDirectory ( Keys.meshViewerKey );
             }
 
             ActionListener al = e -> {
@@ -322,7 +323,7 @@ public class AMMenubar {
                 builder.runToolAt ( new File (item.getToolTipText ()) );
             };
 
-            item.setIcon ( SystemUtils.getSystemIcon ( path) );
+            item.setIcon ( SystemUtils.getSystemIcon ( path)  );
             item.setToolTipText ( path );
             item.addActionListener ( al );
         }

@@ -1,9 +1,9 @@
 package com.github.errayeil.utils;
 
 import com.github.errayeil.Persistence.Persistence;
-import com.github.errayeil.ui.Custom.AMFileChooser;
 
 import javax.swing.Box;
+import javax.swing.JFileChooser;
 import java.awt.Dimension;
 
 /**
@@ -16,7 +16,7 @@ public class CompUtils {
 	/**
 	 * File chooser used for various processes in the GDModdingSuite.
 	 */
-	private static AMFileChooser chooser;
+	private static JFileChooser chooser;
 
 	/**
 	 *
@@ -38,9 +38,9 @@ public class CompUtils {
 	 *
 	 * @return The new file chooser
 	 */
-	public static AMFileChooser getFileChooser ( String dialogTitle , int selectionMode , boolean multipleSelection ) {
+	public static JFileChooser getFileChooser ( String dialogTitle , int selectionMode , boolean multipleSelection ) {
 		if ( chooser == null )
-			chooser = new AMFileChooser ( );
+			chooser = new JFileChooser ( );
 
 		config.registerFileChooser ( chooser , "utilsChooser" );
 

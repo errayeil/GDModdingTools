@@ -5,7 +5,7 @@ import com.alexandriasoftware.swing.JInputValidatorPreferences;
 import com.alexandriasoftware.swing.Validation;
 import com.alexandriasoftware.swing.Validation.Type;
 import com.github.errayeil.Persistence.Persistence;
-import com.github.errayeil.ui.Custom.AMFileChooser;
+import com.github.errayeil.Persistence.Persistence.Keys;
 import com.github.errayeil.utils.ToolsUtils;
 import io.codeworth.panelmatic.PanelMatic;
 
@@ -25,6 +25,11 @@ import static io.codeworth.panelmatic.componentbehavior.Modifiers.L_START;
 import static io.codeworth.panelmatic.util.Groupings.lineGroup;
 
 /**
+ * Custom JComponent class that guides the user through the AssetManager setup process.
+ *
+ * @//TODO: Code Refactoring
+ * @//TODO: Documentation
+ *
  * @author Errayeil
  * @version 0.1
  * @since 0.1
@@ -66,27 +71,36 @@ public class SSPanel extends JComponent {
 }
 
 /**
+ * The SetupPanel component provides the user the ability to input the various Grim Dawn modding
+ * directories needed and their preferred editor tool paths for txt, lua, and various img formats.
  *
+ * @//TODO: Code Refactoring
+ * @//TODO: Documentation
+ *
+ * @author Errayeil
+ * @version 0.1
+ * @since 0.1
  */
 class SetupPanel extends JComponent {
 
 	/**
-	 *
+	 * Preferences wrapper class that makes it easier to contain data we need to be persistent
+	 * between instances.
 	 */
 	private final Persistence persist = Persistence.getInstance ( );
 
 	/**
-	 *
+	 * The path to tools (DBREditor or AifEditor, for example) when the tool path is set.
 	 */
 	private final Map<String, String> toolPaths = new HashMap<> ( );
 
 	/**
-	 *
+	 * Complete Button for the setup panel.
 	 */
 	private final JButton completeButton;
 
 	/**
-	 *
+	 * The various paths set by the user.
 	 */
 	private String gdDirPath = "";
 	private String gdToolDirPath = "";
@@ -98,7 +112,9 @@ class SetupPanel extends JComponent {
 
 
 	/**
-	 *
+	 * Constructs the panel.
+	 * <br>
+	 * TODO: Look into refactoring this for better code organization and readability.
 	 */
 	public SetupPanel ( ) {
 		JLabel gdDirLabel = new JLabel ( "Choose Grim Dawn install directory:" );
@@ -126,12 +142,12 @@ class SetupPanel extends JComponent {
 		JButton prefImgFCButton = new JButton ( "..." );
 		completeButton = new JButton ( "Complete Setup" );
 		JButton cancelButton = new JButton ( "Cancel Setup" );
-		AMFileChooser chooser = new AMFileChooser ( );
-		chooser.setAccessory ( new JTextArea (  ) );
+		JFileChooser chooser = new JFileChooser ( );
 
-		persist.loadAndRegister ( chooser, "setup-chooser" );
+		//TODO: FileChooser persistence does not work at the moment. A custom FileChooser class with custom components will be needed.
+		//persist.loadAndRegister ( chooser, "setup-chooser" );
 
-		completeButton.setEnabled ( false );
+		completeButton.setEnabled ( false ); //We don't want the complete button enabled until every path field is filled.
 		gdDirPathField.setEditable ( false );
 		gdDirPathField.setFocusable ( false );
 		gdToolDirPathField.setEditable ( false );
@@ -147,6 +163,7 @@ class SetupPanel extends JComponent {
 		prefImgEditorPathField.setEditable ( false );
 		prefImgEditorPathField.setFocusable ( false );
 
+		//Input verifiers do the validation work.
 		gdDirPathField.setInputVerifier ( createGDDirValidator ( gdDirPathField ) );
 		gdToolDirPathField.setInputVerifier ( createGDToolDirValidator ( gdToolDirPathField ) );
 		gdBuildDirPathField.setInputVerifier ( createGDBuildDirValidator ( gdBuildDirPathField ) );
@@ -155,12 +172,12 @@ class SetupPanel extends JComponent {
 		prefTxtEditorPathField.setInputVerifier ( createPrefEditorValidator ( prefTxtEditorPathField , "txt" ) );
 		prefImgEditorPathField.setInputVerifier ( createPrefEditorValidator ( prefImgEditorPathField , "img" ) );
 
-		chooser.setMultiSelectionEnabled ( false );
+		//chooser.setMultiSelectionEnabled ( false );
 
 		builtInLuaItem.addActionListener ( ( a ) -> {
 			if ( builtInLuaItem.isSelected ( ) ) {
 				prefLuaFCButton.setEnabled ( false );
-				prefLuaEditorPathField.setText ( "USE BUILT-IN" );
+				prefLuaEditorPathField.setText ( Keys.builtInKey );
 			} else {
 				prefLuaFCButton.setEnabled ( true );
 				prefLuaEditorPathField.setText ( "" );
@@ -171,7 +188,10 @@ class SetupPanel extends JComponent {
 		builtInTxtItem.addActionListener ( ( a ) -> {
 			if ( builtInTxtItem.isSelected ( ) ) {
 				prefTxtFCButton.setEnabled ( false );
-				prefTxtEditorPathField.setText ( "USE BUILT-IN" );
+				/**
+				 * @see Persistence
+				 */
+				prefTxtEditorPathField.setText ( Keys.builtInKey );
 			} else {
 				prefTxtFCButton.setEnabled ( true );
 				prefTxtEditorPathField.setText ( "" );
@@ -235,17 +255,17 @@ class SetupPanel extends JComponent {
 		} );
 
 		completeButton.addActionListener ( ( a ) -> {
-			persist.registerDirectory ( persist.gdDirKey, gdDirPath );
-			persist.registerDirectory ( persist.gdBuildDirKey, gdBuildDirPath );
-			persist.registerDirectory ( persist.gdToolDirKey, gdToolDirPath );
-			persist.registerDirectory ( persist.gdWorkingDirKey, gdWorkingDirPath );
-			persist.registerDirectory ( persist.prefEditorKey + persist.luaKey, prefLuaDirPath );
-			persist.registerDirectory ( persist.prefEditorKey + persist.txtKey, prefTxtDirPath );
-			persist.registerDirectory ( persist.prefEditorKey + persist.imgKey, prefImgDirPath );
+			persist.registerDirectory ( Keys.gdDirKey, gdDirPath );
+			persist.registerDirectory ( Keys.gdBuildDirKey, gdBuildDirPath );
+			persist.registerDirectory ( Keys.gdToolDirKey, gdToolDirPath );
+			persist.registerDirectory ( Keys.gdWorkingDirKey, gdWorkingDirPath );
+			persist.registerDirectory ( Keys.prefEditorKey + Keys.luaKey, prefLuaDirPath );
+			persist.registerDirectory ( Keys.prefEditorKey + Keys.txtKey, prefTxtDirPath );
+			persist.registerDirectory ( Keys.prefEditorKey + Keys.imgKey, prefImgDirPath );
 
 			for (String toolNameKey : toolPaths.keySet ()) {
 				String toolPath = toolPaths.get ( toolNameKey );
-				persist.registerDirectory ( toolNameKey.toLowerCase () + persist.pathKey, toolPath );
+				persist.registerDirectory ( toolNameKey.toLowerCase () + Keys.pathKey, toolPath );
 			}
 
 			persist.registerSetupCompletion ();
@@ -448,7 +468,7 @@ class SetupPanel extends JComponent {
 					return new Validation ( Type.NONE , "" , preferences );
 				}
 
-				if ( !text.equals ( persist.builtInKey ) ) {
+				if ( !text.equals ( Keys.builtInKey ) ) {
 					if ( Files.isDirectory ( Paths.get ( text ) ) && !new File ( text ).getName ( ).endsWith ( "exe" ) ) {
 						message = "The path provided does not point to a valid executable.";
 						type = Type.WARNING;
@@ -464,8 +484,8 @@ class SetupPanel extends JComponent {
 					message = "The built-in editor will be the preferred app.";
 					type = Type.SUCCESS;
 					switch ( forWhat ) {
-						case "lua" -> prefLuaDirPath = persist.builtInKey;
-						case "txt" -> prefTxtDirPath = persist.builtInKey;
+						case "lua" -> prefLuaDirPath = Keys.builtInKey;
+						case "txt" -> prefTxtDirPath = Keys.builtInKey;
 					}
 				}
 

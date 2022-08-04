@@ -1,6 +1,7 @@
 package com.github.errayeil.Actions.Menubar;
 
 import com.github.errayeil.Persistence.Persistence;
+import com.github.errayeil.Persistence.Persistence.Keys;
 import com.github.errayeil.ui.Window.AMMenubar;
 
 import javax.swing.JCheckBoxMenuItem;
@@ -49,9 +50,9 @@ public class SetBuildDirectoryAction implements ActionListener {
 
 		if (selected != null && selected.isDirectory ()) {
 			if (selected.getAbsolutePath ().endsWith ( "Grim Dawn" )) {
-				persist.registerDirectory ( persist.gdBuildDirKey, selected.getAbsolutePath () + File.separator + "mods" );
+				persist.registerDirectory ( Keys.gdBuildDirKey, selected.getAbsolutePath () + File.separator + "mods" );
 			} else {
-				persist.registerDirectory ( persist.gdBuildDirKey, selected.getAbsolutePath ( ) );
+				persist.registerDirectory ( Keys.gdBuildDirKey, selected.getAbsolutePath ( ) );
 			}
 
 			item.setSelected ( true );

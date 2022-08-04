@@ -1,6 +1,6 @@
 package com.github.errayeil.ui.Dialogs.Panels;
 
-import com.github.errayeil.ui.Dialogs.EntryData.FileChooserEntryData;
+import com.github.errayeil.ui.Dialogs.EntryData.FCEData;
 import io.codeworth.panelmatic.PanelMatic;
 
 import javax.swing.JButton;
@@ -29,7 +29,7 @@ public class FCPanel extends JComponent {
 	/**
 	 *
 	 */
-	private FileChooserEntryData data;
+	private FCEData data;
 
 	/**
 	 *
@@ -37,7 +37,7 @@ public class FCPanel extends JComponent {
 	public FCPanel ( ) {
 		chooser = new JFileChooser ( );
 		okButton = new JButton ( "Okay" );
-		data = new FileChooserEntryData ( );
+		data = new FCEData ( );
 		JButton cancelButton = new JButton ( "Cancel" );
 
 		//TODO custom popup menu
@@ -98,7 +98,7 @@ public class FCPanel extends JComponent {
 	/**
 	 * @return
 	 */
-	public FileChooserEntryData getReturnData ( ) {
+	public FCEData getReturnData ( ) {
 		return data;
 	}
 }

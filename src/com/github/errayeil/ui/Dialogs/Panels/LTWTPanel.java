@@ -3,7 +3,7 @@ package com.github.errayeil.ui.Dialogs.Panels;
 import com.alexandriasoftware.swing.JInputValidator;
 import com.alexandriasoftware.swing.JInputValidatorPreferences;
 import com.alexandriasoftware.swing.Validation;
-import com.github.errayeil.ui.Dialogs.EntryData.WeightToolEntryData;
+import com.github.errayeil.ui.Dialogs.EntryData.WTEData;
 import com.github.errayeil.utils.CompUtils;
 import com.github.errayeil.utils.ToolsUtils;
 import io.codeworth.panelmatic.PanelMatic;
@@ -44,7 +44,7 @@ public class LTWTPanel extends JComponent {
 	/**
 	 *
 	 */
-	private final WeightToolEntryData data;
+	private final WTEData data;
 
 	/**
 	 *
@@ -63,7 +63,7 @@ public class LTWTPanel extends JComponent {
 		okButton = new JButton ( "Okay" );
 		lootTableFileField = new JTextField ( 30 );
 		lootWeightField = new JTextField ( 30 );
-		data = new WeightToolEntryData ( );
+		data = new WTEData ( );
 		JButton cancelButton = new JButton ( "Cancel" );
 		JButton lootTableFCButton = new JButton ( "..." );
 		Font font = UIManager.getDefaults ( ).getFont ( "Label.font" ).deriveFont ( 14 ).deriveFont ( Font.BOLD );
@@ -146,7 +146,7 @@ public class LTWTPanel extends JComponent {
 	/**
 	 * @return
 	 */
-	public WeightToolEntryData getReturnData ( ) {
+	public WTEData getReturnData ( ) {
 		return data;
 	}
 

@@ -1,6 +1,7 @@
 package com.github.errayeil.App;
 
 import com.github.errayeil.Persistence.Persistence;
+import com.github.errayeil.Persistence.Persistence.Keys;
 import com.github.errayeil.ui.Dialogs.Dialogs;
 
 public class Startup {
@@ -35,19 +36,19 @@ public class Startup {
 	 *
 	 */
 	private void checkResources() {
-		if ( !persist.hasBeenRegistered ( persist.suiteInstallDirKey) ) {
+		if ( !persist.hasBeenRegistered ( Keys.suiteInstallDirKey) ) {
 			//TODO
 		}
 
-		if ( !persist.hasBeenRegistered ( persist.suiteUpdateDirKey)) {
+		if ( !persist.hasBeenRegistered ( Keys.suiteUpdateDirKey)) {
 			//TODO
 		}
 
-		if ( !persist.hasBeenRegistered ( persist.suiteLogFileDirKey)) {
+		if ( !persist.hasBeenRegistered ( Keys.suiteLogFileDirKey)) {
 			//TODO
 		}
 
-		if (!persist.hasBeenRegistered ( persist.suiteLogFilePathKey)) {
+		if (!persist.hasBeenRegistered ( Keys.suiteLogFilePathKey)) {
 			//TODO
 		}
 	}

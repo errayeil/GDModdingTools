@@ -2,7 +2,7 @@ package com.github.errayeil.ui.Dialogs.Panels;
 
 import com.github.errayeil.ListApps.ListApps;
 import com.github.errayeil.ListApps.Software;
-import com.github.errayeil.ui.Custom.IALCellRenderer;
+import com.github.errayeil.ui.List.IALCellRenderer;
 import io.codeworth.panelmatic.PanelMatic;
 
 import javax.swing.*;

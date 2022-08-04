@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="de.schlichtherle.truezip.swing" type="repository">
+    <properties maven-id="de.schlichtherle.truezip:truezip-swing:7.7.8" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/de/schlichtherle/truezip/truezip-swing/7.7.8/truezip-swing-7.7.8.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/findbugs/annotations/3.0.0/annotations-3.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/de/schlichtherle/truezip/truezip-swing/7.7.8/truezip-swing-7.7.8-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/findbugs/annotations/3.0.0/annotations-3.0.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

@@ -5,6 +5,7 @@ import com.alexandriasoftware.swing.JInputValidatorPreferences;
 import com.alexandriasoftware.swing.Validation;
 import com.alexandriasoftware.swing.Validation.Type;
 import com.github.errayeil.Persistence.Persistence;
+import com.github.errayeil.Persistence.Persistence.Keys;
 import io.codeworth.panelmatic.PanelMatic;
 
 import javax.swing.*;
@@ -70,7 +71,7 @@ public class CEPanel extends JComponent {
 					}
 				}
 
-				persist.registerDirectory ( persist.prefEditorKey + forEditor, path );
+				persist.registerDirectory ( Keys.prefEditorKey + forEditor, path );
 			}
 
 			SwingUtilities.windowForComponent ( CEPanel.this ).dispose ( );

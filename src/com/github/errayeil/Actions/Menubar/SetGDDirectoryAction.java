@@ -1,6 +1,7 @@
 package com.github.errayeil.Actions.Menubar;
 
 import com.github.errayeil.Persistence.Persistence;
+import com.github.errayeil.Persistence.Persistence.Keys;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.swing.JCheckBoxMenuItem;
@@ -54,7 +55,7 @@ public class SetGDDirectoryAction implements ActionListener {
 					String name = f.getName ();
 
 					if (name.equals ( "Grim Dawn.exe" )) {
-						persist.registerDirectory ( persist.gdExeDirKey, f.getAbsolutePath () );
+						persist.registerDirectory ( Keys.gdExeDirKey, f.getAbsolutePath () );
 						String md5 = "";
 
 						try ( InputStream stream = new FileInputStream ( f ) ) {
@@ -64,7 +65,7 @@ public class SetGDDirectoryAction implements ActionListener {
 						}
 
 						if (md5.equals ( md5checksum )) {
-							persist.registerDirectory ( persist.gdDirKey, folder.getAbsolutePath () );
+							persist.registerDirectory ( Keys.gdDirKey, folder.getAbsolutePath () );
 							item.setSelected ( true );
 							item.setEnabled ( false );
 							break;

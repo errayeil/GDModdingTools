@@ -1,8 +1,8 @@
 package com.github.errayeil.ui.Dialogs;
 
-import com.github.errayeil.ui.Dialogs.EntryData.FileChooserEntryData;
-import com.github.errayeil.ui.Dialogs.EntryData.NameToolEntryData;
-import com.github.errayeil.ui.Dialogs.EntryData.WeightToolEntryData;
+import com.github.errayeil.ui.Dialogs.EntryData.FCEData;
+import com.github.errayeil.ui.Dialogs.EntryData.NTEData;
+import com.github.errayeil.ui.Dialogs.EntryData.WTEData;
 import com.github.errayeil.Persistence.Persistence;
 import com.github.errayeil.ui.Dialogs.Panels.*;
 
@@ -10,16 +10,21 @@ import javax.swing.JDialog;
 import java.io.InputStream;
 
 /**
+ * Class similar to JOptionPane with more tailored dialog panels.
+ *
+ * @//TODO: Code Refactoring - Consolidate to one Dialog, general cleanup, invoke on SDT
+ * @//TODO: Documentation - Make sure everything is documented well
+ *
  * @author ErraYeil
- * @version 1.0
- * @since 1.0
+ * @version 0.1
+ * @since 0.1
  */
-public class Dialogs {
+public final class Dialogs {
 
 	/**
-	 *
+	 * Preferences wrapper class that helps keep a bunch of data persistent between instances.
 	 */
-	private static Persistence config = Persistence.getInstance ( );
+	private static final Persistence config = Persistence.getInstance ( );
 
 
 	/**
@@ -32,14 +37,16 @@ public class Dialogs {
 	/**
 	 * Custom method for displaying a JFileChooser because I plan on creating a custom JFileChooser at some point with
 	 * expanded features. For now, JFileChooser will do.
-	 *
-	 * @param dialogTitle    The title for the Dialog
-	 * @param selectionMode  Whether only files or directories can be selected, or both.
+	 * <br>
+	 * TODO - This is not in use yet. FCPanel is not complete.
+	 * @see FCPanel
+	 * @param dialogTitle    The title for the Dialog.
+	 * @param selectionMode  If only files or directories can be selected, or both.
 	 * @param multiSelection If multiple files or directories can be selected.
 	 *
 	 * @return
 	 */
-	public static FileChooserEntryData showFileChooserDialog ( String dialogTitle , int selectionMode , boolean multiSelection ) {
+	public static FCEData showFileChooserDialog ( String dialogTitle , int selectionMode , boolean multiSelection ) {
 		JDialog dialog = new JDialog ( );
 		FCPanel panel = new FCPanel ( );
 
@@ -66,11 +73,13 @@ public class Dialogs {
 	}
 
 	/**
-	 * @param dialogTitle The title that should be displayed in the title bar of the dialog.
+	 * Shows the LTNameTool dialog.
 	 *
-	 * @return
+	 * @param dialogTitle The title for the dialog.
+	 *
+	 * @return Input data retrieve from the panel of the dialog.
 	 */
-	public static NameToolEntryData showNTInputDialog ( String dialogTitle ) {
+	public static NTEData showNTInputDialog ( String dialogTitle ) {
 		JDialog dialog = new JDialog ( );
 		LTNTPanel panel = new LTNTPanel ( );
 
@@ -99,7 +108,7 @@ public class Dialogs {
 	 *
 	 * @return
 	 */
-	public static WeightToolEntryData showWTInputDialog ( String dialogTitle ) {
+	public static WTEData showWTInputDialog ( String dialogTitle ) {
 		JDialog dialog = new JDialog ( );
 		LTWTPanel panel = new LTWTPanel ( );
 

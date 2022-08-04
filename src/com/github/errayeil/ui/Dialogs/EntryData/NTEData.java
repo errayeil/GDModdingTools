@@ -8,7 +8,7 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-public class NameToolEntryData implements EntryData {
+public class NTEData implements EntryData {
 
     public String recordPath;
 
@@ -17,7 +17,7 @@ public class NameToolEntryData implements EntryData {
      */
     public List<String> lootTableFiles;
 
-    public NameToolEntryData() {
+    public NTEData () {
 
     }
 }

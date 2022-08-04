@@ -1,5 +1,6 @@
 package com.github.errayeil.Actions.Menubar;
 
+import com.github.errayeil.Persistence.Persistence.Keys;
 import com.github.errayeil.ui.Dialogs.Dialogs;
 import com.github.errayeil.Persistence.Persistence;
 
@@ -27,7 +28,7 @@ public class RunGDAction implements ActionListener {
 	public void actionPerformed ( ActionEvent e ) {
 		Persistence persist = Persistence.getInstance ();
 		Desktop desktop = Desktop.getDesktop ();
-		String path = persist.getDirectory ( persist.gdExeDirKey );
+		String path = persist.getDirectory ( Keys.gdExeDirKey );
 
 		if (path != null) {
 			try {

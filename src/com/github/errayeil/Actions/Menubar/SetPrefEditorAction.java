@@ -1,5 +1,6 @@
 package com.github.errayeil.Actions.Menubar;
 
+import com.github.errayeil.Persistence.Persistence.Keys;
 import com.github.errayeil.ui.Dialogs.Dialogs;
 import com.github.errayeil.Persistence.Persistence;
 
@@ -40,7 +41,7 @@ public class SetPrefEditorAction implements ActionListener {
 		Dialogs.showChooseEditorDialog ( "Choose preferred editor", forEditor);
 		Persistence persist = Persistence.getInstance ();
 
-		if (persist.hasBeenRegistered ( persist.prefEditorKey + forEditor )) {
+		if (persist.hasBeenRegistered ( Keys.prefEditorKey + forEditor )) {
 			item.setSelected ( true );
 			item.setEnabled ( false );
 		}

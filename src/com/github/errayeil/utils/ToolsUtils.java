@@ -1,5 +1,7 @@
 package com.github.errayeil.utils;
 
+import com.github.errayeil.ui.finder.Filters.*;
+
 import javax.swing.JOptionPane;
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,9 +16,56 @@ public class ToolsUtils {
 	/**
 	 *
 	 */
+	public static class Extensions {
+
+		/**
+		 * Grim Dawn file extensions.
+		 */
+		public static final String anmExt = "anm";
+		public static final String arcExt = "arc";
+		public static final String arzExt = "arz";
+		public static final String cnvExt = "cnv";
+		public static final String dbrExt = "dbr";
+		public static final String fntExt = "fnt";
+		public static final String luaExt = "lua";
+		public static final String mshExt = "msh";
+		public static final String pfxExt = "pfx";
+		public static final String qstExt = "qst";
+		public static final String sshExt = "ssh";
+		public static final String texExt = "tex";
+		public static final String tplExt = "tpl";
+		public static final String txtExt = "txt";
+		public static final String wavExt = "wav";
+
+		/**
+		 * TexViewer output extensions
+		 */
+		public static final String psdExt = "psd";
+		public static final String bmpExt = "bmp";
+		public static final String jpgExt = "jpg";
+		public static final String tgaExt = "tga";
+		public static final String pngExt = "png";
+
+		/**
+		 * World files.
+		 */
+		public static final String wrlExt = "wrl";
+		public static final String lvlExt = "lvl";
+		public static final String rlvExt = "rlv";
+
+	}
+
+	/**
+	 *
+	 */
 	private final static String[] validLootTableClasses = {
 			"lootitemtable_dynweighted_dynaffix.tpl" , "lootitemtable_dynweight.tpl" ,
 			"lootitemtable_fixedweight.tpl" , "lootitemtable_dynitemlist.tpl" };
+
+	public final static FinderFilter[] filters = { new AnmFileFilter (), new ArczFileFilter (), new CnvFileFilter ()
+	, new DBRFileFilter (), new FntFileFilter (),  new ImgFileFilter (), new LevelFileFilter (),
+	new LuaFileFilter (), new MshFileFilter (), new PfxFileFilter (), new QstFileFilter (), new SshFileFilter (),
+	new TexFileFilter (), new TPLFileFilter (), new TxtFileFilter (), new WavFileFilter ()};
 
 
 	private ToolsUtils() {}

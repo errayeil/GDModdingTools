@@ -58,6 +58,11 @@ public class GDTProcessBuilder {
 		}
 	}
 
+	/**
+	 *
+	 * @param fileToOpenPath
+	 * @param programToRunPath
+	 */
 	public void openFileWith ( String fileToOpenPath , String programToRunPath ) {
 		ProcessBuilder builder = new ProcessBuilder ( );
 		List<String> list = new ArrayList<> ( );
@@ -74,6 +79,10 @@ public class GDTProcessBuilder {
 		}
 	}
 
+	/**
+	 *
+	 * @throws IOException
+	 */
 	public void runCmdPrompt ( ) throws IOException {
 		ProcessBuilder builder = new ProcessBuilder ( );
 
